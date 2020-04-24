@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<body>
+<!--        <a href="user/register">Register</a>-->
+
+    <div th:if="${username}">
+        <p>
+            Hello, <span th:text="${username}" >".
+        </p>
+    </div>
+        <div th:unless="${username}">
+            <a href="/login-page">Login</a>
+            <a href="/home">HOME</a>
+        </div>
+</body>
+</html>

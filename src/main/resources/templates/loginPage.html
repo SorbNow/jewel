@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<form method="post" th:action="@{/submit-login-form}" enctype="application/x-www-form-urlencoded">
+<!--    <security:csrfInput/>-->
+
+    <p>
+        <label>
+            Login:
+            <select name="j_username">
+                <tr th:each="userNames : ${loginData.getUsers()}">
+                    <option th:text="${userNames.getLogin()}"></option>
+                </tr>
+            </select>
+        </label>
+    </p>
+
+    <p>
+        <label>
+            Password:
+            <input type="password" name="j_password">
+        </label>
+
+    </p>
+
+    <span style="color: red" th:if="${param.error}">Invalid username or password</span>
+
+    <p>
+        <input type="submit" value="Login">
+    </p>
+
+</form>
+
+</body>
+</html>

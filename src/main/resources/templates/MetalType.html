@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" th:action="metalType" enctype="application/x-www-form-urlencoded">
+
+    <p>
+        <label>
+            Metal:
+            <input type="text" name="metalNameField">
+        </label>
+    </p>
+
+    <p>
+        <label>
+            Hallmark:
+            <input type="text" name="hallmarkField">
+        </label>
+    </p>
+    <p>
+        <input type="submit">
+    </p>
+
+
+</form>
+
+</body>
+</html>
