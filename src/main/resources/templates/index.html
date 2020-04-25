@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <body>
+<th:block th:include="/_adminMenu"></th:block>
 <!--        <a href="user/register">Register</a>-->
 
     <div th:if="${username}">
         <p>
-            Hello, <span th:text="${username}" >".
+            Hello, <span th:text="${username}" >.</span>
         </p>
     </div>
         <div th:unless="${username}">

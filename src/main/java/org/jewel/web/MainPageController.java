@@ -12,6 +12,8 @@ public class MainPageController {
     public String mainPage(Principal principal, ModelMap model) {
         if (principal != null) {
             model.addAttribute("username", principal.getName());
+        } else {
+            return "redirect:/login-page";
         }
         return "index";
     }
