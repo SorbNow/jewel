@@ -2,6 +2,7 @@ package org.jewel.web;
 
 import org.jewel.db.UserRepository;
 import org.jewel.model.User;
+import org.jewel.model.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -77,6 +79,11 @@ public class LoginController {
         if (user != null && encoder.matches(form.getPassword(), user.getEncodedPassword())) {
             model.addAttribute("loggedUsername", loggedUserName);
             model.addAttribute("userGroupName", form.getGroupName());
+            Date loginDate = new Date();
+            System.out.println("loginDate : " + loginDate);
+            user.setLastLogin(loginDate);
+            user.setStatus(UserStatus.ACTIVE);
+            users.save(user);
             return "redirect:/home";
         } else {
             validationResult.addError(new FieldError("form", "password", "Wrong username or password"));

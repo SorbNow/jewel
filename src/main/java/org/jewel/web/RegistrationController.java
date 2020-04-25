@@ -6,6 +6,7 @@ import org.jewel.db.UserRoleRepository;
 import org.jewel.model.Group;
 import org.jewel.model.User;
 import org.jewel.model.UserRole;
+import org.jewel.model.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -50,7 +52,7 @@ public class RegistrationController {
         return data;
     }
 
-    @GetMapping(path = "/user/register")
+    @GetMapping(path = "/admin/register")
     public String getRegistrationForm(ModelMap model,
                                       @ModelAttribute("form") RegistrationForm form) {
         List<Group> groupList = groupRepository.findAllGroups();
@@ -85,6 +87,8 @@ public class RegistrationController {
             u.setLogin(form.getLogin());
             u.setGroup(group);
             u.setEncodedPassword(encoder.encode(form.getPassword()));
+            u.setLastLogin(new Date(0));
+            u.setStatus(UserStatus.REGISTERED);
             if (group.getName().equals("admin")){
                 u.setUserRole("ADMIN");//userRoleRepository.findByRoleName("ADMIN"));
             } else {

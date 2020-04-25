@@ -2,6 +2,7 @@ package org.jewel.web;
 
 import org.jewel.db.UserRepository;
 import org.jewel.model.User;
+import org.jewel.model.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Component
 public class UserRoleService implements UserDetailsService {
@@ -25,11 +27,15 @@ public class UserRoleService implements UserDetailsService {
         }
 
         System.out.println("Found user: " + user.getLogin() );
-        ArrayList<GrantedAuthority> roles = new ArrayList<>();
+        /*ArrayList<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-        /*if (username.equals("admin")) {
+        if (username.equals("admin")) {
             roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }*/
+
+        user.setLastLogin(new Date());
+        user.setStatus(UserStatus.ACTIVE);
+        users.save(user);
 
         UserDetails userD =
                 org.springframework.security.core.userdetails.User.builder()
