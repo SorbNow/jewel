@@ -1,41 +1,49 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <title>Login</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Sign in</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="style.css"/>
+
+
 </head>
-<body>
+<body class="body">
+<div class="login-form">
+    <form method="post" th:action="@{/submit-login-form}" enctype="application/x-www-form-urlencoded">
+        <h2 class="text-center"></h2>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <select name="j_username" class="form-control" th:placeholder="Username">
+                    <tr th:each="userNames : ${loginData.getUsers()}">
+                        <option th:text="${userNames.getLogin()}"></option>
+                    </tr>
+                </select>
+            </div>
 
-<form method="post" th:action="@{/submit-login-form}" enctype="application/x-www-form-urlencoded">
-<!--    <security:csrfInput/>-->
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-lock"></i></span> <input
+                    type="password" class="form-control" name="j_password"/>
 
-    <p>
-        <label>
-            Login:
-            <select name="j_username">
-                <tr th:each="userNames : ${loginData.getUsers()}">
-                    <option th:text="${userNames.getLogin()}"></option>
-                </tr>
-            </select>
-        </label>
-    </p>
+            </div>
 
-    <p>
-        <label>
-            Password:
-            <input type="password" name="j_password">
-        </label>
-
-    </p>
-
-    <span style="color: red" th:if="${param.error}">Invalid username or password</span>
-
-    <p>
-        <input type="submit" value="Login">
-    </p>
-
-</form>
+        </div>
+        <span style="color: red" th:if="${param.error}">Invalid username or password</span>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary login-btn btn-block">Вход</button>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
