@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+</head>
+<body>
+
+<th:block th:include="/_adminMenu"/>
+
+<form th:action="@{/admin/customers}" method="post" enctype="application/x-www-form-urlencoded">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+
+            <th scope="col">№</th>
+            <th scope="col">Торговое подразделение</th>
+            <th scope="col">Город</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="customerToView : ${customersList}">
+            <td th:utext="${customerToViewStat.index}">№</td>
+            <td th:utext="${customerToView.getCustomerName()}">Торговое подразделение</td>
+            <td th:utext="${customerToView.getCustomerCity()}">Город</td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>

@@ -1,8 +1,10 @@
 package org.jewel.web;
 
+import org.jewel.db.CustomerRepository;
 import org.jewel.db.GroupRepository;
 import org.jewel.db.UserRepository;
 import org.jewel.db.UserRoleRepository;
+import org.jewel.model.Customer;
 import org.jewel.model.Group;
 import org.jewel.model.User;
 import org.jewel.model.UserRole;
@@ -29,6 +31,9 @@ public class StartupListener {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @EventListener
     @Transactional
@@ -68,6 +73,20 @@ public class StartupListener {
             role2.setRoleDescription("");
             userRoleRepository.save(role1);
             userRoleRepository.save(role2);
+        }
+        List<Customer> customers = new ArrayList<>();
+        for (Customer customer: customerRepository.findAll()) {
+            customers.add(customer);
+        }
+        if (customers.size() == 0) {
+            Customer cus1 = new Customer();
+            cus1.setCustomerName("BGD");
+            cus1.setCustomerCity("SPB");
+            Customer cus2 = new Customer();
+            cus2.setCustomerName("Дмитровка");
+            cus2.setCustomerCity("Москва");
+            customerRepository.save(cus1);
+            customerRepository.save(cus2);
         }
 
     }

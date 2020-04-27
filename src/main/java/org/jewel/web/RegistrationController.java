@@ -56,8 +56,6 @@ public class RegistrationController {
     public String getRegistrationForm(ModelMap model,
                                       @ModelAttribute("form") RegistrationForm form) {
         List<Group> groupList = groupRepository.findAllGroups();
-
-
         model.addAttribute("data", createData());
         return "register";
     }

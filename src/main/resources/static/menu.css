@@ -9,9 +9,10 @@ ul {
 a {
     text-decoration: none; /*убираем подчеркивание текста ссылок*/
     background:rgba(1, 1, 2, 0.27); /*добавляем фон к пункту меню (заменив этот параметр, вы поменяете цвет всех пунктов меню)*/
-    color:#fff; /*меняем цвет ссылок*/
+    color:#fff !important; /*меняем цвет ссылок*/
     padding:0px 15px; /*добавляем отступ*/
-    font-family: arial; /*меняем шрифт*/
+    font-family: arial, fantasy !important; /*меняем шрифт*/
+    font-size: 16px !important;
     line-height:50px; /*ровняем меню по вертикали*/
     display: block;
     border-right: 1px solid rgba(0, 0, 0, 0.08); /*добавляем бордюр справа*/
@@ -39,4 +40,9 @@ li:hover > ul {
 }
 li:hover > ul > li {
     float:none; /*Убираем горизонтальное позиционирование*/
+}
+body{
+    margin-top: 0;
+    margin-left: 5px;
+    margin-right: 5px;
 }

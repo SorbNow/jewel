@@ -12,10 +12,23 @@ public class Customer {
     @Column(nullable = false, unique = true)
     private String customerName;
 
+    @Column
+    private String customerCity;
+
     //add column to customers for finding in upper/lower case?
+
+
+    public String getCustomerCity() {
+        return customerCity;
+    }
+
+    public void setCustomerCity(String customerCity) {
+        this.customerCity = customerCity;
+    }
 
     public Customer() {
     }
+
 
     public Customer(String customerName) {
         this.customerName = customerName;

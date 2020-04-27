@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+<!--    <link rel="stylesheet" th:href="@{/menu.css}"/>-->
+</head>
+<body>
+<th:block th:include="/_adminMenu"></th:block>
+
+<form th:action="@{/admin/users}" method="post" enctype="application/x-www-form-urlencoded">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+
+            <th scope="col">№</th>
+            <th scope="col">Логин</th>
+            <th scope="col">Уровень доступа</th>
+            <th scope="col">Дата последнего входа</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="userToView : ${userList}">
+            <td th:utext="${userToViewStat.index+1}">№</td>
+            <td th:utext="${userToView.getLogin()}">Логин</td>
+            <td th:utext="${userToView.getUserRole()}">Уровень доступа</td>
+            <td th:utext="${userToView.getLastLogin()}">Дата последнего входа</td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>

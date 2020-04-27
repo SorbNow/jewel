@@ -1,3 +1,4 @@
+/*
 package org.jewel.web;
 
 import org.jewel.db.UserRepository;
@@ -24,3 +25,4 @@ public class UserRestController {
         return allUsers;
     }
 }
+*/

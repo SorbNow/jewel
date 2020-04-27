@@ -5,11 +5,13 @@ import org.jewel.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RepositoryRestResource(collectionResourceRel = "users", itemResourceRel = "users", path = "users")
 public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
     User findByLogin(String login);
 
