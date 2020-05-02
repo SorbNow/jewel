@@ -1,6 +1,10 @@
 package org.jewel.model;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 @Entity
 @Table
@@ -10,9 +14,11 @@ public class Customer {
     private int id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Поле обязательно для заполнения")
     private String customerName;
 
     @Column
+    @NotBlank(message = "Поле обязательно для заполнения")
     private String customerCity;
 
     //add column to customers for finding in upper/lower case?

@@ -83,10 +83,18 @@ public class StartupListener {
             cus1.setCustomerName("BGD");
             cus1.setCustomerCity("SPB");
             Customer cus2 = new Customer();
-            cus2.setCustomerName("Дмитровка");
-            cus2.setCustomerCity("Москва");
+            cus2.setCustomerName("BGD2");
+            cus2.setCustomerCity("SPB");
+            Customer cus3 = new Customer();
+            cus3.setCustomerName("BGD3");
+            cus3.setCustomerCity("SPB");
+            Customer cus4 = new Customer();
+            cus4.setCustomerName("Дмитровка");
+            cus4.setCustomerCity("Москва");
             customerRepository.save(cus1);
             customerRepository.save(cus2);
+            customerRepository.save(cus3);
+            customerRepository.save(cus4);
         }
 
     }

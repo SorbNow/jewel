@@ -4,55 +4,68 @@
     <meta charset="UTF-8">
     <title>Customers</title>
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
-   <!-- <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>-->
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <!-- <link rel="stylesheet"
+           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+     <link rel="stylesheet"
+           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>-->
 </head>
 <body>
 
 <th:block th:include="/_adminMenu"/>
 
 <form th:action="@{/admin/customers}" method="post" enctype="application/x-www-form-urlencoded">
-    <table class="table table-striped">
-        <thead>
-        <tr>
 
-            <th scope="col">№</th>
-            <th scope="col"></th>
+    <a th:href="@{/admin/customer/add}">
 
-            <th scope="col">Торговое подразделение</th>
-            <th scope="col">Город</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
 
-        <tr th:each="customerToView : ${customersList}">
-            <td th:utext="${customerToViewStat.index+1}">№</td>
-            <td style="vertical-align: top">
-<!--                <a th:href="@{/admin/customer/{id}(id = ${customerToView.getId()})}" style="display: inline; " class="button btn-warning btn-sm" > Ред </a>-->
+    </a>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
 
-                <a th:href="@{/admin/customer/{id}(id = ${customerToView.getId()})}">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                </a>
+                <th scope="col">№</th>
+                <th scope="col"></th>
 
-            </td>
-            <td th:utext="${customerToView.getCustomerName()}">Торговое подразделение</td>
-            <td th:utext="${customerToView.getCustomerCity()}">Город</td>
+                <th scope="col">Торговое подразделение</th>
+                <th scope="col">Город</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
 
-            <td>
-                <a th:href="@{/admin/customer/delete/{id}(id = ${customerToView.getId()})}">
-                <button type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
-            </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            <tr th:each="customerToView : ${customersList}">
+                <td th:utext="${customerToViewStat.index+1}">№</td>
+                <td style="vertical-align: top">
+                    <!--                <a th:href="@{/admin/customer/{id}(id = ${customerToView.getId()})}" style="display: inline; " class="button btn-warning btn-sm" > Ред </a>-->
+
+                    <a th:href="@{/admin/customer/{id}(id = ${customerToView.getId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </a>
+
+                </td>
+                <td th:utext="${customerToView.getCustomerName()}">Торговое подразделение</td>
+                <td th:utext="${customerToView.getCustomerCity()}">Город</td>
+
+                <td>
+                    <a th:href="@{/admin/customer/delete/{id}(id = ${customerToView.getId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </form>
 </body>
 </html>

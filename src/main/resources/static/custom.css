@@ -1,0 +1,15 @@
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: rgba(247, 255, 0, 0.15);
+}.table-striped>tbody>tr:nth-child(even)>td,
+.table-striped>tbody>tr:nth-child(even)>th {
+    background-color: rgba(116, 255, 0, 0.16);
+}
+
+.input-group-addon {
+    background-color: #64ccf1;
+}
+
+.form-control {
+    width: 60%;
+}

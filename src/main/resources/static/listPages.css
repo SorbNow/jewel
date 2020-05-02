@@ -1,0 +1,56 @@
+.add-btn {
+    height: 80px;
+    line-height: 80px;
+    width: 80px;
+    font-size: 2em;
+    font-weight: bold;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.button-circle {
+    width: 100px;
+    height: 100px;
+    background: red;
+    border-radius: 50%
+}
+
+a.button-add {
+    text-decoration: none;
+    outline: none;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 25px;
+    margin: 10px 0px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 3px;
+    font-weight: 600;
+    color: #524f4e;
+    background: rgba(0, 201, 59, 0.45);
+    box-shadow: 0 8px 15px rgba(0,0,0,.1);
+    transition: .3s;
+}
+a.button-add:hover {
+    background: #00f273;
+    box-shadow: 0 15px 20px rgba(0, 242, 88, 0.4);
+    color: black;
+    transform: translateY(-1px);
+}
+body {
+    background-color: rgba(28,28,28,0.12);
+}
+
+div.input_pages {
+    width: 70%;
+    align-content: center;
+    margin-top: 3%;
+    margin-left: 1%;
+}

@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org" >
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Редактирование подразделения</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
 </head>
 <body>
-    <th:block th:include="/_adminMenu"/>
-    <form th:action="@{/admin/customer/{id}(id=${customer.getId()})}" method="post" th:object="${customer}" enctype="application/x-www-form-urlencoded">
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/admin/customer/{id}(id=${customer.getId()})}" method="post" th:object="${customer}"
+      enctype="application/x-www-form-urlencoded">
 
-        <p>
-            <label>
-                Торговое подразделение:
-                <input type="text" th:value="${customer.customerName}" th:name="customerName" />
-            </label>
+   <div class="input_pages">
 
-            <!--        <form:errors path="login" cssStyle="color: red" />-->
-        </p>
-        <p>
-            <label>
-                Город:
-                <input type="text" th:value="${customer.customerCity}" name="customerCity" />
-            </label>
-            <!--        <form:errors path="password" cssStyle="color: red" />-->
-        </p>
+    <div class="form-group">
+        <label for="customerName">Торговое подразделение:</label>
+        <input type="text" th:value="${customer.customerName}" th:name="customerName"  class="form-control" id="customerName">
+        <!--        <form:errors path="customerName" cssStyle="color: red" />-->
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="customerCity">Город:</label>
+        <input type="text" th:value="${customer.customerCity}" th:name="customerCity"  class="form-control" id="customerCity">
+        <!--        <form:errors path="customerCity" cssStyle="color: red" />-->
+    </div>
 
 
-        <p>
-            <input type="submit">
-        </p>
-    </form>
+    <p>
+        <input type="submit">
+    </p>
+   </div>
+</form>
 
 </body>
 </html>
