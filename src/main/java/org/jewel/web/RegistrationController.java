@@ -60,7 +60,7 @@ public class RegistrationController {
         return "register";
     }
 
-    @PostMapping(path = "/user/register")
+    @PostMapping(path = "/admin/register")
     public String processRegistrationForm(
             ModelMap model,
             @Validated
@@ -87,11 +87,7 @@ public class RegistrationController {
             u.setEncodedPassword(encoder.encode(form.getPassword()));
             u.setLastLogin(new Date(0));
             u.setStatus(UserStatus.REGISTERED);
-            if (group.getName().equals("admin")){
-                u.setUserRole("ADMIN");//userRoleRepository.findByRoleName("ADMIN"));
-            } else {
-                u.setUserRole("USER");//userRoleRepository.findByRoleName("USER"));
-            }
+            u.setUserRole(form.getRole());
             users.save(u);
         } catch (Throwable cause) {
             validationResult.addError(new FieldError("form", "login",

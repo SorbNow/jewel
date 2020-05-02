@@ -1,4 +1,4 @@
-ul {
+.main_menu_ul {
     list-style: none; /*убираем маркеры списка*/
     margin: 0; /*убираем отступы*/
     padding-left: 0; /*убираем отступы*/
@@ -6,7 +6,7 @@ ul {
     background: rgba(1, 1, 2, 0.27); /*добавляем фон всему меню (заменив этот параметр, вы поменяете цвет всего меню)*/
     height: 50px; /*задаем высоту*/
 }
-a {
+.main_menu_a {
     text-decoration: none; /*убираем подчеркивание текста ссылок*/
     background:rgba(1, 1, 2, 0.27); /*добавляем фон к пункту меню (заменив этот параметр, вы поменяете цвет всех пунктов меню)*/
     color:#fff !important; /*меняем цвет ссылок*/
@@ -20,28 +20,28 @@ a {
     -o-transition: all 0.3s 0.01s ease;
     -webkit-transition: all 0.3s 0.01s ease;
 }
-a:hover {
+.main_menu_a:hover {
     background: #2700d4;/*добавляем эффект при наведении*/
 }
-li {
+.main_menu_li {
     float:left; /*Размещаем список горизонтально для реализации меню*/
 }
 
-li > ul {
+.main_menu_li > ul {
     position:absolute;
     top:25px;
     display:none;
 }
 
 /*Делаем скрытую часть видимой*/
-li:hover > ul {
+.main_menu_li:hover > ul {
     display:block;
     width:250px;  /*Задаем ширину выпадающего меню*/
 }
-li:hover > ul > li {
+.main_menu_li:hover > ul > li {
     float:none; /*Убираем горизонтальное позиционирование*/
 }
-body{
+.main_menu_body{
     margin-top: 0;
     margin-left: 5px;
     margin-right: 5px;

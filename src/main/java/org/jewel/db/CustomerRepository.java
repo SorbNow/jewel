@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @RepositoryRestResource(collectionResourceRel = "customers", itemResourceRel = "customers", path = "customers")
 public interface CustomerRepository extends PagingAndSortingRepository<Customer, Integer> {
     Customer findCustomerByCustomerName(String customerName);
+    Customer findCustomerById(int id);
 }

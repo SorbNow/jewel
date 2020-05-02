@@ -1,5 +1,8 @@
 package org.jewel.web;
 
+import org.jewel.model.UserRole;
+import org.jewel.model.UserRoles;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -12,6 +15,8 @@ public class RegistrationForm {
 
     private String password;
     private String selectedGroupName;
+    private String role;
+
 
     public String getLogin() {
         return login;
@@ -35,6 +40,14 @@ public class RegistrationForm {
 
     public void setSelectedGroupName(String selectedGroupName) {
         this.selectedGroupName = selectedGroupName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

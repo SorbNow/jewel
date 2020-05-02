@@ -6,18 +6,18 @@
     <link th:rel="stylesheet" th:href="@{/menu.css}"/>
 
 </head>
-<body>
-<div>
-<ul>
-    <li><a th:href="@{/home}"> Главная</a></li>
-    <li><a href="#"> Заказы</a></li>
-    <li><a href="#"> Пользователи</a>
-        <ul>
-            <li><a th:href="@{/admin/users}"> Список пользователей</a></li>
-            <li><a th:href="@{/admin/register}"> Добавить пользователя</a></li>
+<body class="main_menu_body">
+<div >
+<ul class="main_menu_ul">
+    <li class="main_menu_li"><a th:href="@{/home}" class="main_menu_a"> Главная</a></li>
+    <li class="main_menu_li"><a href="#" class="main_menu_a"> Заказы</a></li>
+    <li class="main_menu_li"><a href="#" class="main_menu_a"> Пользователи</a>
+        <ul class="main_menu_ul">
+            <li class="main_menu_li"><a th:href="@{/admin/users}" class="main_menu_a"> Список пользователей</a></li>
+            <li class="main_menu_li"><a th:href="@{/admin/register}" class="main_menu_a"> Добавить пользователя</a></li>
         </ul>
     </li>
-    <li> <a th:href="@{/admin/customers}"> Подразделения</a> </li>
+    <li class="main_menu_li"> <a th:href="@{/admin/customers}" class="main_menu_a"> Подразделения</a> </li>
 </ul>
 </div>
 </body>
