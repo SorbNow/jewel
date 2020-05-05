@@ -1,6 +1,5 @@
 package org.jewel.web;
 
-import org.jewel.db.GroupRepository;
 import org.jewel.db.UserRepository;
 import org.jewel.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,6 @@ public class UserViewController {
 
     @Autowired
     private UserRepository users;
-
-    @Autowired
-    private GroupRepository groupRepository;
-
 
     @GetMapping(path = "/admin/users")
     public String getUserList(ModelMap model) {

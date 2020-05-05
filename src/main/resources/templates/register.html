@@ -30,17 +30,6 @@
     </p>
 
     <p>
-        <label>
-            Group:
-            <select name="selectedGroupName">
-                <tr th:each="groups : ${data.getGroups()}">
-                    <option th:text="${groups.getName()}"></option>
-                </tr>
-            </select>
-        </label>
-
-    </p>
-    <p>
         <label for="UserRole">
             <select name="role" id="UserRole">
                 <tr th:each="role : ${roles}">

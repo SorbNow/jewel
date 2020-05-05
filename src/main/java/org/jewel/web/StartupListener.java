@@ -1,7 +1,6 @@
 package org.jewel.web;
 
 import org.jewel.db.CustomerRepository;
-import org.jewel.db.GroupRepository;
 import org.jewel.db.UserRepository;
 import org.jewel.db.UserRoleRepository;
 import org.jewel.model.*;
@@ -20,8 +19,6 @@ public class StartupListener {
     @Autowired
     private UserRepository userDAO;
 
-    @Autowired
-    private GroupRepository repository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -36,14 +33,6 @@ public class StartupListener {
     @Transactional
     public void applicationStarted(ContextRefreshedEvent event) {
 
-        if (repository.findGroupByName("admins") == null) {
-            Group g1 = new Group("admins");
-            Group g2 = new Group("test");
-            Group g3 = new Group("test22");
-            repository.save(g1);
-            repository.save(g2);
-            repository.save(g3);
-        }
         List<User> users = new ArrayList<>();
         for (User user : userDAO.findAll()) {
             users.add(user);
@@ -52,7 +41,6 @@ public class StartupListener {
             User u = new User();
             u.setLogin("master");
             u.setEncodedPassword(encoder.encode("123"));
-            u.setGroup(repository.findGroupByName("admins"));
             u.setUserRole("АДМИНИСТРАТОР");
             u.setStatus(UserStatus.REGISTERED);
             userDAO.save(u);

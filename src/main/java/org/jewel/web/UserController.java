@@ -1,9 +1,7 @@
 package org.jewel.web;
 
-import org.jewel.db.GroupRepository;
 import org.jewel.db.UserRepository;
 import org.jewel.db.UserRoleRepository;
-import org.jewel.model.Group;
 import org.jewel.model.User;
 import org.jewel.model.UserRoles;
 import org.jewel.model.UserStatus;
@@ -28,9 +26,6 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private GroupRepository groupRepository;
-
-    @Autowired
     private PasswordEncoder encoder;
 
     @Autowired
@@ -44,12 +39,6 @@ public class UserController {
         return roles;
     }
 
-    public RegistrationFormData createData() {
-        RegistrationFormData data = new RegistrationFormData();
-        data.setGroups(groupRepository.findAllGroups());
-        return data;
-    }
-
 
     @GetMapping(path = "/admin/users/{id}")
     public String editUser(@PathVariable(name = "id") int id, ModelMap modelMap) {
@@ -59,7 +48,6 @@ public class UserController {
         for (UserRoles userRoles: UserRoles.values()) {
             roles.add(userRoles.name());
         }
-        modelMap.addAttribute("data", createData());
         modelMap.addAttribute("roles", getListOfRoles());
         return "editUser";
     }

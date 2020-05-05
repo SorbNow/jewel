@@ -30,7 +30,6 @@ public class LoginController {
         LoginForm form = new LoginForm();
         form.setSelectedUserName(userList.get(0).getLogin());
         form.setPassword("");
-        form.setGroupName(userList.get(0).getGroup().getName());
         return form;
     }
 
@@ -52,9 +51,6 @@ public class LoginController {
             return "redirect:/";
         }
         List<User> userList = users.findAllUsers();
-        if (userList.size() == 0) {
-            return "redirect:/user/register";
-        }
         model.addAttribute("loginData", createData());
         return "loginPage";
     }
@@ -78,7 +74,6 @@ public class LoginController {
 
         if (user != null && encoder.matches(form.getPassword(), user.getEncodedPassword())) {
             model.addAttribute("loggedUsername", loggedUserName);
-            model.addAttribute("userGroupName", form.getGroupName());
             Date loginDate = new Date();
             System.out.println("loginDate : " + loginDate);
             user.setLastLogin(loginDate);

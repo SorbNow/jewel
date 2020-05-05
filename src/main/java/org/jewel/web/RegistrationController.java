@@ -1,6 +1,5 @@
 package org.jewel.web;
 
-import org.jewel.db.GroupRepository;
 import org.jewel.db.UserRepository;
 import org.jewel.db.UserRoleRepository;
 import org.jewel.model.*;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -25,8 +23,6 @@ public class RegistrationController {
     @Autowired
     private UserRepository users;
 
-    @Autowired
-    private GroupRepository groupRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -36,11 +32,9 @@ public class RegistrationController {
 
     @ModelAttribute("form")
     public RegistrationForm createForm() {
-        List<Group> groupList = groupRepository.findAllGroups();
         RegistrationForm form = new RegistrationForm();
         form.setLogin("");
         form.setPassword("");
-        form.setSelectedGroupName(groupList.get(0).getName());
         form.setRole("");
 
         return form;
@@ -54,18 +48,10 @@ public class RegistrationController {
         return roles;
     }
 
-    public RegistrationFormData createData() {
-        RegistrationFormData data = new RegistrationFormData();
-        data.setGroups(groupRepository.findAllGroups());
-        return data;
-    }
-
     @GetMapping(path = "/admin/users/add")
     public String getRegistrationForm(ModelMap model,
                                       @ModelAttribute("form") RegistrationForm form) {
-        List<Group> groupList = groupRepository.findAllGroups();
         List<String> roles = getListOfRoles();
-        model.addAttribute("data", createData());
         model.addAttribute("roles", roles);
         return "register";
     }
@@ -78,14 +64,7 @@ public class RegistrationController {
                     RegistrationForm form,
             BindingResult validationResult
     ) {
-        model.addAttribute("data", createData());
         model.addAttribute("roles", getListOfRoles());
-        Group group = groupRepository.findGroupByName(form.getSelectedGroupName());
-        if (group == null) {
-            validationResult.addError(new FieldError("form", "selectedGroupName",
-                    "No group " + form.getSelectedGroupName() + "found"));
-            return "register";
-        }
 
         if (validationResult.hasErrors()) {
             return "register";
@@ -94,7 +73,6 @@ public class RegistrationController {
         try {
             User u = new User();
             u.setLogin(form.getLogin());
-            u.setGroup(group);
             u.setEncodedPassword(encoder.encode(form.getPassword()));
             u.setLastLogin(new Date(0));
             u.setStatus(UserStatus.REGISTERED);

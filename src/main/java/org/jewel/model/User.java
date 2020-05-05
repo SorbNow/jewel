@@ -27,9 +27,6 @@ public class User {
     @Size(min = 3,message = "Password must be at least 3 chars")
     private String encodedPassword;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Group group;
-
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
@@ -71,14 +68,6 @@ public class User {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 
     public UserStatus getStatus() {

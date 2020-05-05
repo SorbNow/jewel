@@ -15,7 +15,6 @@ public class RegistrationForm {
 
     @Size(min = 4, message = "Слишком короткий пароль")
     private String password;
-    private String selectedGroupName;
 
     private String role;
 
@@ -36,13 +35,6 @@ public class RegistrationForm {
         this.password = password;
     }
 
-    public String getSelectedGroupName() {
-        return selectedGroupName;
-    }
-
-    public void setSelectedGroupName(String selectedGroupName) {
-        this.selectedGroupName = selectedGroupName;
-    }
 
     public String getRole() {
         return role;
@@ -58,13 +50,13 @@ public class RegistrationForm {
         if (o == null || getClass() != o.getClass()) return false;
         RegistrationForm form = (RegistrationForm) o;
         return Objects.equals(login, form.login) &&
-                Objects.equals(password, form.password) &&
-                Objects.equals(selectedGroupName, form.selectedGroupName);
+                Objects.equals(password, form.password);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, password,  selectedGroupName);
+        return Objects.hash(login, password);
     }
 
     @Override
@@ -72,7 +64,6 @@ public class RegistrationForm {
         return "RegistrationForm{" +
                 "login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", selectedGroup=" + selectedGroupName +
                 '}';
     }
 }

@@ -3,15 +3,6 @@ package org.jewel.web;
 public class LoginForm {
     private String selectedUserName;
     private String password;
-    private String userGroupName;
-
-    public String getGroupName() {
-        return userGroupName;
-    }
-
-    public void setGroupName(String userGroupName) {
-        this.userGroupName = userGroupName;
-    }
 
     public String getSelectedUserName() {
         return selectedUserName;
