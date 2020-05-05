@@ -17,6 +17,7 @@
         <div class="form-group">
             <label for="login">Логин:</label>
             <input type="text" th:value="${user.login}" th:name="login"  class="form-control" id="login">
+            <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:class="'error'" style="color: red"> Ошибка</p>
             <!--        <form:errors path="customerName" cssStyle="color: red" />-->
         </div>
         <p></p>

@@ -101,7 +101,7 @@ public class CustomerController {
             return "addCustomer";
         }
         customerRepository.save(customer);
-        modelMap.addAttribute("customer", customerRepository.findAll());
+        modelMap.addAttribute("customers", customerRepository.findAll());
         return "redirect:/admin/customers";
     }
 }

@@ -66,10 +66,10 @@ public class UserController {
 
     @PostMapping(path = "/admin/users/{id}")
     public String saveUser(@PathVariable(name = "id") int id,
+                           ModelMap modelMap,
                            @Validated
                            @ModelAttribute("user")
                                    User user,
-                           ModelMap modelMap,
                            BindingResult validationResult) {
         modelMap.addAttribute("roles", getListOfRoles());
         User user1 = userRepository.findUserById(id);
@@ -84,7 +84,7 @@ public class UserController {
             return "editUser";
         }
         userRepository.save(user1);
-        modelMap.addAttribute("user", userRepository.findAll());
+        modelMap.addAttribute("users", userRepository.findAll());
 
         return "redirect:/admin/users";
     }

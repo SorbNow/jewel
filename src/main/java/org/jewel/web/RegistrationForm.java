@@ -13,8 +13,10 @@ public class RegistrationForm {
     @Pattern(regexp = "[a-zA-Z0-9-_.]+", message = "Accepted only digits, letters, minus, underscore and dots ")
     private String login;
 
+    @Size(min = 4, message = "Слишком короткий пароль")
     private String password;
     private String selectedGroupName;
+
     private String role;
 
 
