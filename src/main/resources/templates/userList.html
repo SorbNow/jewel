@@ -2,35 +2,66 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title>Пользователи</title>
 <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
 <!--    <link rel="stylesheet" th:href="@{/menu.css}"/>-->
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
 </head>
 <body>
-<th:block th:include="/_adminMenu"></th:block>
+<th:block th:include="/_adminMenu"/>
 
 <form th:action="@{/admin/users}" method="post" enctype="application/x-www-form-urlencoded">
+
+    <a th:href="@{/admin/users/add}">
+
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+    </a>
+    <div>
     <table class="table table-striped">
         <thead>
         <tr>
 
             <th scope="col">№</th>
+            <th scope="col"></th>
             <th scope="col">Логин</th>
             <th scope="col">Уровень доступа</th>
             <th scope="col">Дата последнего входа</th>
+            <th scope="col">Статус</th>
         </tr>
         </thead>
         <tbody>
 
         <tr th:each="userToView : ${userList}">
             <td th:utext="${userToViewStat.index+1}">№</td>
+            <td style="vertical-align: top">
+                <a th:href="@{/admin/users/{id}(id = ${userToView.getId()})}">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </a>
+
+            </td>
             <td th:utext="${userToView.getLogin()}">Логин</td>
             <td th:utext="${userToView.getUserRole()}">Уровень доступа</td>
             <td th:utext="${userToView.getLastLogin()}">Дата последнего входа</td>
+            <td th:utext="${userToView.getStatus()}">статус</td>
+            <td>
+                <a th:href="@{/admin/users/delete/{id}(id = ${userToView.getId()})}">
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </a>
+            </td>
         </tr>
         </tbody>
     </table>
+    </div>
 </form>
 </body>
 </html>

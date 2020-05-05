@@ -60,7 +60,8 @@ public class CustomerController {
         if (validationResult.hasErrors()) {
             return "editCustomer";
         }
-        if (customerRepository.findCustomerByCustomerName(customer.getCustomerName()) != null ) {
+        if ((customerRepository.findCustomerByCustomerName(customer.getCustomerName()) != null) &&
+                (!customer.getCustomerName().equals(customerRepository.findCustomerById(id).getCustomerName()))) {
             validationResult.addError(new FieldError("customer", "customerName",
                     "Подразделение " + customer.getCustomerName() + " уже есть в базе."));
             return "editCustomer";

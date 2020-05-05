@@ -4,10 +4,7 @@ import org.jewel.db.CustomerRepository;
 import org.jewel.db.GroupRepository;
 import org.jewel.db.UserRepository;
 import org.jewel.db.UserRoleRepository;
-import org.jewel.model.Customer;
-import org.jewel.model.Group;
-import org.jewel.model.User;
-import org.jewel.model.UserRole;
+import org.jewel.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -56,7 +53,8 @@ public class StartupListener {
             u.setLogin("master");
             u.setEncodedPassword(encoder.encode("123"));
             u.setGroup(repository.findGroupByName("admins"));
-            u.setUserRole("ADMIN");
+            u.setUserRole("АДМИНИСТРАТОР");
+            u.setStatus(UserStatus.REGISTERED);
             userDAO.save(u);
         }
         List<UserRole> roles = new ArrayList<>();

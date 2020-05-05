@@ -17,13 +17,13 @@
     <div class="form-group">
         <label for="customerName">Торговое подразделение:</label>
         <input type="text" th:value="${customer.customerName}" th:name="customerName"  class="form-control" id="customerName">
-        <!--        <form:errors path="customerName" cssStyle="color: red" />-->
+        <p th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}" th:class="'error'" style="color: red"> Ошибка</p>
     </div>
     <p></p>
     <div class="form-group">
         <label for="customerCity">Город:</label>
         <input type="text" th:value="${customer.customerCity}" th:name="customerCity"  class="form-control" id="customerCity">
-        <!--        <form:errors path="customerCity" cssStyle="color: red" />-->
+        <p th:if="${#fields.hasErrors('customerCity')}" th:errors="*{customerCity}" th:class="'error'" style="color: red"> Ошибка</p>
     </div>
 
 

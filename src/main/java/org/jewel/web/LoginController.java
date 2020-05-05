@@ -36,7 +36,7 @@ public class LoginController {
 
     public LoginFormData createData() {
         LoginFormData loginForm = new LoginFormData();
-        loginForm.setUsers(users.findAllUsers());
+        loginForm.setUsers(users.findActiveUsers(UserStatus.ACTIVE,UserStatus.REGISTERED));
         return loginForm;
     }
 
