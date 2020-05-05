@@ -84,4 +84,12 @@ public class UserController {
         userRepository.save(user);
         return "redirect:/admin/users";
     }
+
+    @GetMapping(path = "/admin/users/{id}/clearPassword")
+    public String clearUserPassword(@PathVariable(name = "id") int id) {
+        User user = userRepository.findUserById(id);
+        user.setEncodedPassword(encoder.encode("1111"));
+        userRepository.save(user);
+        return "redirect:/admin/users";
+    }
 }

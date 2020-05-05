@@ -11,6 +11,14 @@
 <th:block th:include="/_adminMenu"/>
 <form th:action="@{/admin/users/{id}(id=${user.getId()})}" method="post" th:object="${user}"
       enctype="application/x-www-form-urlencoded">
+    <a th:href="@{/admin/users/{id}/clearPassword(id=${user.getId()})}">
+
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm" style="background: red">
+            <span class="glyphicon glyphicon-alert" >   Сбросить пароль пользователя</span>
+        </button>
+
+    </a>
 
     <div class="input_pages">
 

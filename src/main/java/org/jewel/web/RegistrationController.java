@@ -84,6 +84,6 @@ public class RegistrationController {
             return "register";
         }
 
-        return "redirect:/login-page";
+        return "redirect:/admin/users";
     }
 }
