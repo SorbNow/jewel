@@ -1,7 +1,6 @@
 package org.jewel.web;
 
 import org.jewel.db.UserRepository;
-import org.jewel.db.UserRoleRepository;
 import org.jewel.model.User;
 import org.jewel.model.UserRoles;
 import org.jewel.model.UserStatus;
@@ -28,9 +27,6 @@ public class RegistrationController {
 
     @Autowired
     private PasswordEncoder encoder;
-
-    @Autowired
-    private UserRoleRepository userRoleRepository;
 
     @ModelAttribute("form")
     public RegistrationForm createForm() {

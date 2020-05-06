@@ -1,8 +1,5 @@
 package org.jewel.web;
 
-import org.jewel.model.UserRole;
-import org.jewel.model.UserRoles;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;

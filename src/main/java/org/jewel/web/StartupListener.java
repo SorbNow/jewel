@@ -2,7 +2,6 @@ package org.jewel.web;
 
 import org.jewel.db.CustomerRepository;
 import org.jewel.db.UserRepository;
-import org.jewel.db.UserRoleRepository;
 import org.jewel.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -24,9 +23,6 @@ public class StartupListener {
     private PasswordEncoder encoder;
 
     @Autowired
-    private UserRoleRepository userRoleRepository;
-
-    @Autowired
     private CustomerRepository customerRepository;
 
     @EventListener
@@ -44,21 +40,6 @@ public class StartupListener {
             u.setUserRole("АДМИНИСТРАТОР");
             u.setStatus(UserStatus.REGISTERED);
             userDAO.save(u);
-        }
-        List<UserRole> roles = new ArrayList<>();
-        for (UserRole role: userRoleRepository.findAll())
-        {
-            roles.add(role);
-        }
-        if (roles.size() == 0) {
-            UserRole role1 = new UserRole();
-            role1.setRoleName("ADMIN");
-            role1.setRoleDescription("role for admin users");
-            UserRole role2 = new UserRole();
-            role2.setRoleName("USER");
-            role2.setRoleDescription("");
-            userRoleRepository.save(role1);
-            userRoleRepository.save(role2);
         }
         List<Customer> customers = new ArrayList<>();
         for (Customer customer: customerRepository.findAll()) {
