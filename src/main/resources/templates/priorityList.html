@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список видов важности заказов</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/admin/priorities}" method="post" enctype="application/x-www-form-urlencoded">
+
+    <a th:href="@{/admin/priority/add}">
+
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+    </a>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+
+                <th scope="col">№</th>
+                <th scope="col"></th>
+
+                <th scope="col">Приоритет</th>
+                <th scope="col">Подробное описание</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="priorityToView : ${allPrioritiesList}">
+                <td th:utext="${priorityToViewStat.index+1}">№</td>
+                <td style="vertical-align: top">
+
+                    <a th:href="@{/admin/priority/{id}(id = ${priorityToView.getId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </a>
+
+                </td>
+                <td th:utext="${priorityToView.getPriorityType()}">Приоритет</td>
+                <td th:utext="${priorityToView.getDescription()}">описание</td>
+
+                <td>
+                    <a th:href="@{/admin/priority/delete/{id}(id = ${priorityToView.getId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+</body>
+</html>

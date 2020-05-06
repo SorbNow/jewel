@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование приоритета заказов</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/admin/priority/{id}(id=${priority.getId()})}" method="post" th:object="${priority}"
+      enctype="application/x-www-form-urlencoded">
+
+    <div class="input_pages">
+
+        <div class="form-group">
+            <label for="priorityName">Краткое описание :</label>
+            <input type="text" th:value="${priority.priorityType}" th:name="priorityType"  class="form-control" id="priorityName">
+            <p th:if="${#fields.hasErrors('priorityType')}" th:errors="*{priorityType}" th:class="'error'" style="color: red"> Ошибка</p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="priorityDescription">Полное название:</label>
+            <input type="text" th:value="${priority.description}" th:name="description"  class="form-control" id="priorityDescription">
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" th:class="'error'" style="color: red"> Ошибка описания</p>
+        </div>
+
+
+        <p>
+            <input type="submit">
+        </p>
+    </div>
+</form>
+
+</body>
+</html>

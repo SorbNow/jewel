@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryRestResource(collectionResourceRel = "priorities", itemResourceRel = "priorities", path = "priorities")
 public interface PriorityRepository extends PagingAndSortingRepository<Priority, Integer> {
+
+    Priority findPriorityByPriorityType(String type);
+    Priority findPriorityById(int id);
 }

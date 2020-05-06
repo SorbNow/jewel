@@ -1,6 +1,8 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table
@@ -10,9 +12,12 @@ public class Priority {
     private int id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Поле не может быть пустым")
     private String priorityType;
 
     @Column
+    @NotBlank(message = "Поле не может быть пустым")
+    @Size(min = 4, message = "Поле не можеть быть короче 4 символов")
     private String description;
 
     public int getId() {
