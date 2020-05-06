@@ -2,7 +2,9 @@ package org.jewel.web;
 
 import org.jewel.db.UserRepository;
 import org.jewel.db.UserRoleRepository;
-import org.jewel.model.*;
+import org.jewel.model.User;
+import org.jewel.model.UserRoles;
+import org.jewel.model.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

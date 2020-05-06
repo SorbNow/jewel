@@ -33,7 +33,7 @@ public class UserController {
 
     private List<String> getListOfRoles() {
         List<String> roles = new ArrayList<>();
-        for (UserRoles userRoles: UserRoles.values()) {
+        for (UserRoles userRoles : UserRoles.values()) {
             roles.add(userRoles.name());
         }
         return roles;
@@ -45,7 +45,7 @@ public class UserController {
         User user = userRepository.findUserById(id);
         modelMap.addAttribute("user", user);
         List<String> roles = new ArrayList<>();
-        for (UserRoles userRoles: UserRoles.values()) {
+        for (UserRoles userRoles : UserRoles.values()) {
             roles.add(userRoles.name());
         }
         modelMap.addAttribute("roles", getListOfRoles());

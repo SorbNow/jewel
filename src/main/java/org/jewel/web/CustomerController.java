@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +94,7 @@ public class CustomerController {
         if (validationResult.hasErrors()) {
             return "addCustomer";
         }
-        if (customerRepository.findCustomerByCustomerName(customer.getCustomerName()) != null ) {
+        if (customerRepository.findCustomerByCustomerName(customer.getCustomerName()) != null) {
             validationResult.addError(new FieldError("customer", "customerName",
                     "Подразделение " + customer.getCustomerName() + " уже есть в базе."));
             return "addCustomer";

@@ -15,7 +15,7 @@
 
         <p></p>
         <button type="button" class="btn btn-default btn-sm" style="background: red">
-            <span class="glyphicon glyphicon-alert" >   Сбросить пароль пользователя</span>
+            <span class="glyphicon glyphicon-alert">   Сбросить пароль пользователя</span>
         </button>
 
     </a>
@@ -24,15 +24,15 @@
 
         <div class="form-group">
             <label for="login">Логин:</label>
-            <input type="text" th:value="${user.login}" th:name="login"  class="form-control" id="login">
-            <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:class="'error'" style="color: red"> Ошибка</p>
-            <!--        <form:errors path="customerName" cssStyle="color: red" />-->
+            <input type="text" th:value="${user.login}" th:name="login" class="form-control" id="login">
+            <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:class="'error'" style="color: red">
+                Ошибка</p>
         </div>
         <p></p>
-        <div class="form-group" >
-            <label  for="UserRole">
+        <div class="form-group">
+            <label for="UserRole">
                 <select id="UserRole" th:name="userRole">
-                    <tr th:each ="role : ${roles}">
+                    <tr th:each="role : ${roles}">
                         <option th:text="${role}"></option>
                     </tr>
                 </select>

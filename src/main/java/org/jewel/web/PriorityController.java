@@ -22,17 +22,17 @@ public class PriorityController {
     private PriorityRepository priorityRepository;
 
     @GetMapping(path = "/admin/priority/add")
-    public String addPriority(ModelMap modelMap){
+    public String addPriority(ModelMap modelMap) {
         Priority priority = new Priority();
-        modelMap.addAttribute("priority",priority);
+        modelMap.addAttribute("priority", priority);
         return "addPriority";
     }
 
-    @PostMapping(path = "/admin/priority/add" )
+    @PostMapping(path = "/admin/priority/add")
     public String addPriorityPost(ModelMap modelMap,
                                   @Validated
                                   @ModelAttribute("priority")
-                                  Priority priority,
+                                          Priority priority,
                                   BindingResult validationResult) {
         priority.setPriorityType(priority.getPriorityType().trim());
         priority.setDescription(priority.getDescription().trim());
@@ -51,10 +51,10 @@ public class PriorityController {
     @GetMapping(path = "/admin/priorities")
     public String getPrioritiesList(ModelMap modelMap) {
         List<Priority> priorities = new ArrayList<>();
-        for (Priority priority:priorityRepository.findAll()) {
+        for (Priority priority : priorityRepository.findAll()) {
             priorities.add(priority);
         }
-        modelMap.addAttribute("allPrioritiesList",priorities);
+        modelMap.addAttribute("allPrioritiesList", priorities);
         return "priorityList";
     }
 
@@ -62,16 +62,16 @@ public class PriorityController {
     public String editPriorityGet(@PathVariable(name = "id") int id,
                                   ModelMap modelMap) {
         Priority priority = priorityRepository.findPriorityById(id);
-        modelMap.addAttribute("priority",priority);
+        modelMap.addAttribute("priority", priority);
         return "editPriority";
     }
 
     @PostMapping(path = "/admin/priority/{id}")
-    public String editPriorityPost (@PathVariable(name = "id") int id,
-                                    @Validated
-                                    @ModelAttribute(name = "priority")
-                                    Priority priority,
-                                    BindingResult validationResult) {
+    public String editPriorityPost(@PathVariable(name = "id") int id,
+                                   @Validated
+                                   @ModelAttribute(name = "priority")
+                                           Priority priority,
+                                   BindingResult validationResult) {
 
         priority.setPriorityType(priority.getPriorityType().trim());
         priority.setDescription(priority.getDescription().trim());
@@ -88,7 +88,7 @@ public class PriorityController {
     }
 
     @GetMapping(path = "/admin/priority/delete/{id}")
-    public String deletePriority (@PathVariable(name = "id") int id) {
+    public String deletePriority(@PathVariable(name = "id") int id) {
         Priority priority = priorityRepository.findPriorityById(id);
         priorityRepository.delete(priority);
         return "redirect:/admin/priorities";
