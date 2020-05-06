@@ -16,4 +16,6 @@ public interface MetalTypeRepository extends PagingAndSortingRepository<MetalTyp
 
     @Query("SELECT m FROM MetalType m")
     List<MetalType> findAllMetalTypes();
+
+    MetalType findMetalTypeById(int id);
 }

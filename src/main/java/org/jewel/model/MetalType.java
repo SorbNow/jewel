@@ -1,6 +1,10 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Entity
@@ -19,9 +23,11 @@ public class MetalType {
     private int id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Поле обязательно для заполнения")
     private String metalTypeName;
 
     @Column
+    @Positive(message = "Поле обязательно для заполнения. Может иметь только положительные значения")
     private int hallmark;
 
     @OneToMany

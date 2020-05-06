@@ -30,13 +30,12 @@
         </div>
         <p></p>
         <div class="form-group">
-            <label for="UserRole">
+            <label for="UserRole"> Уровень доступа</label>
+            <p></p>
                 <select id="UserRole" th:name="userRole">
-                    <tr th:each="role : ${roles}">
-                        <option th:text="${role}"></option>
-                    </tr>
+                    <option th:each="role : ${roles}" th:text="${role}" th:selected="${user.userRole}"></option>
                 </select>
-            </label>
+
         </div>
 
 

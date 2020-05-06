@@ -50,10 +50,10 @@ public class CustomerController {
 
     @PostMapping(path = "/admin/customer/{id}")
     public String saveCustomer(@PathVariable(name = "id") int id,
+                               ModelMap modelMap,
                                @Validated
                                @ModelAttribute("customer")
-                                       Customer customer,
-                               ModelMap modelMap,
+                               Customer customer,
                                BindingResult validationResult) {
         customer = trimParameters(customer);
         if (validationResult.hasErrors()) {

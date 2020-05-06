@@ -5,9 +5,10 @@ import org.jewel.model.MetalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServlet;
 import java.util.List;
@@ -18,31 +19,70 @@ public class MetalTypeController extends HttpServlet {
     @Autowired
     private MetalTypeRepository metalTypeRepository;
 
-    @GetMapping(path = "articles/metalType")
-    protected String addMetalTypePage(ModelMap model) {
+    @GetMapping(path = "/article/metalTypes")
+    public String MetalTypePage(ModelMap model) {
         List<MetalType> metalTypes = metalTypeRepository.findAllMetalTypes();
-        model.addAttribute("metalTypesList", metalTypes);
-        return "metalType";
+        model.addAttribute("allMetalTypesList", metalTypes);
+        return "metalTypeList";
     }
 
-    @PostMapping(path = "/articles/metalType")
-    protected String processAddMetalType(@RequestParam("metalNameField") String metalTypeField,
-                                         @RequestParam String hallmarkField) {
-        MetalType metalType = null;
-        int hallmark;
-        try {
+    @GetMapping(path = "/article/metalType/add")
+    public String addMetalTypeGet(ModelMap modelMap) {
+        MetalType metalType = new MetalType();
+        modelMap.addAttribute("metalType" , metalType);
+        return "addMetalType";
+    }
 
-            hallmark = Integer.parseInt(hallmarkField);
-        } catch (NumberFormatException ex) {
-            return "redirect:/articles/metalType";
+    @PostMapping(path = "/article/metalType/add")
+    public String addMetalTypePost(
+                                   @Validated
+                                   @ModelAttribute("metalType")
+                                   MetalType metalType,
+                                   BindingResult validationResult) {
+        metalType.setMetalTypeName(metalType.getMetalTypeName().trim());
+        if (validationResult.hasErrors()) {
+            return "addMetalType";
         }
-        metalType = metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalTypeField, hallmark);
-        if (metalType == null || !metalTypeField.trim().isEmpty()) {
-            metalType = new MetalType();
-            metalType.setMetalTypeName(metalTypeField);
-            metalType.setHallmark(hallmark);
-            metalType = metalTypeRepository.save(metalType);
+        if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()) != null) {
+            validationResult.addError(new FieldError("metalType", "metalTypeName",
+                    "Такая запись уже есть в базе"));
+            return "addMetalType";
         }
-        return "redirect:/articles/metalType";
+        metalTypeRepository.save(metalType);
+        return "redirect:/article/metalTypes";
+    }
+
+    @GetMapping(path = "/article/metalType/{id}")
+    public String editMetalTypeGet(@PathVariable(name = "id") int id,
+                                ModelMap modelMap) {
+        MetalType metalType =metalTypeRepository.findMetalTypeById(id);
+        modelMap.addAttribute("metalType", metalType);
+        return "editMetalType";
+    }
+
+    @PostMapping(path = "/article/metalType/{id}")
+    public String editMetalTypePost(@PathVariable(name = "id") int id,
+                                    @Validated
+                                    @ModelAttribute("metalType")
+                                    MetalType metalType,
+                                    BindingResult validationResult) {
+        metalType.setMetalTypeName(metalType.getMetalTypeName().trim());
+        if (validationResult.hasErrors()) {
+            return "addMetalType";
+        }
+        if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()) != null) {
+            validationResult.addError(new FieldError("metalType", "metalTypeName",
+                    "Такая запись уже есть в базе"));
+            return "addMetalType";
+        }
+        metalTypeRepository.save(metalType);
+        return "redirect:/article/metalTypes";
+    }
+
+    @GetMapping(path = "/article/metalType/delete/{id}")
+    public String deleteMetalType(@PathVariable(name = "id") int id) {
+        MetalType metalType = metalTypeRepository.findMetalTypeById(id);
+        metalTypeRepository.delete(metalType);
+        return "redirect:/article/metalTypes";
     }
 }
