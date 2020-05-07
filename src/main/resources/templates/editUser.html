@@ -33,7 +33,7 @@
             <label for="UserRole"> Уровень доступа</label>
             <p></p>
                 <select id="UserRole" th:name="userRole">
-                    <option th:each="role : ${roles}" th:text="${role}" th:selected="${user.userRole}"></option>
+                    <option th:each="role : ${roles}" th:text="${role}" th:selected="${role == user.userRole}"></option>
                 </select>
 
         </div>
