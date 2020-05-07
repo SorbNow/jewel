@@ -1,6 +1,7 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
@@ -12,6 +13,7 @@ public class Mineral {
     private int id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Поле не может быть пустым")
     private String insert;
 
     @Column

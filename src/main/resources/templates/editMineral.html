@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование вставки</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/article/mineral/{id}(id = ${mineral.getId()})}" method="post" th:object="${mineral}"
+      enctype="application/x-www-form-urlencoded">
+
+    <div class="input_pages">
+
+        <div class="form-group">
+            <label for="insertName">Название вставки :</label>
+            <input type="text" th:value="${mineral.insert}" th:name="insert"  class="form-control" id="insertName">
+            <p th:if="${#fields.hasErrors('insert')}" th:errors="*{insert}" th:class="'error'" style="color: red"> Ошибка</p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="insertVMDesc">Сокращенное наименование вставки в коллекции В. Михайлова:</label>
+            <input type="text" th:value="${mineral.letterMikhailov}" th:name="letterMikhailov"  class="form-control" id="insertVMDesc">
+            <p th:if="${#fields.hasErrors('letterMikhailov')}" th:errors="*{letterMikhailov}" th:class="'error'" style="color: red"> Ошибка </p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="insertChDesc">Сокращенное наименование вставки в коллекции М. Шемякина:</label>
+            <input type="text" th:value="${mineral.letterChemyakin}" th:name="letterChemyakin"  class="form-control" id="insertChDesc">
+            <p th:if="${#fields.hasErrors('letterChemyakin')}" th:errors="*{letterChemyakin}" th:class="'error'" style="color: red"> Ошибка </p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="insertBalletDesc">Сокращенное наименование вставки в балетной коллекции:</label>
+            <input type="text" th:value="${mineral.letterBallet}" th:name="letterBallet"  class="form-control" id="insertBalletDesc">
+            <p th:if="${#fields.hasErrors('letterBallet')}" th:errors="*{letterBallet}" th:class="'error'" style="color: red"> Ошибка </p>
+        </div>
+
+
+        <p>
+            <input type="submit">
+        </p>
+    </div>
+</form>
+</body>
+</html>

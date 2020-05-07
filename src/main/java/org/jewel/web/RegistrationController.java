@@ -50,7 +50,10 @@ public class RegistrationController {
     public String getRegistrationForm(ModelMap model,
                                       @ModelAttribute("form") RegistrationForm form) {
         List<String> roles = getListOfRoles();
+        User user = new User();
         model.addAttribute("roles", roles);
+        model.addAttribute("user", user);
+
         return "register";
     }
 

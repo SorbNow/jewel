@@ -20,7 +20,7 @@ public class MetalTypeController extends HttpServlet {
     private MetalTypeRepository metalTypeRepository;
 
     @GetMapping(path = "/article/metalTypes")
-    public String MetalTypePage(ModelMap model) {
+    public String metalTypePage(ModelMap model) {
         List<MetalType> metalTypes = metalTypeRepository.findAllMetalTypes();
         model.addAttribute("allMetalTypesList", metalTypes);
         return "metalTypeList";
@@ -68,12 +68,12 @@ public class MetalTypeController extends HttpServlet {
                                     BindingResult validationResult) {
         metalType.setMetalTypeName(metalType.getMetalTypeName().trim());
         if (validationResult.hasErrors()) {
-            return "addMetalType";
+            return "editMetalType";
         }
         if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()) != null) {
             validationResult.addError(new FieldError("metalType", "metalTypeName",
                     "Такая запись уже есть в базе"));
-            return "addMetalType";
+            return "editMetalType";
         }
         metalTypeRepository.save(metalType);
         return "redirect:/article/metalTypes";

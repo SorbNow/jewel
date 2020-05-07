@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Минералы</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form  th:action="@{/article/minerals}" method="post" enctype="application/x-www-form-urlencoded">
+
+    <a th:href="@{/article/mineral/add}">
+
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+    </a>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+
+                <th scope="col">№</th>
+                <th scope="col"></th>
+
+                <th scope="col">Название вставки</th>
+                <th scope="col">Шифр Михайлов</th>
+                <th scope="col">Шифр Шемякин</th>
+                <th scope="col">Шифр Балет</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="mineralsToView : ${allMineralsList}">
+                <td th:utext="${mineralsToViewStat.index+1}">№</td>
+                <td style="vertical-align: top">
+
+                    <a th:href="@{/article/mineral/{id}(id = ${mineralsToView.getId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </a>
+
+                </td>
+                <td th:utext="${mineralsToView.getInsert()}">Название вставки</td>
+                <td th:utext="${mineralsToView.getLetterMikhailov()}">Вставка Михайлов</td>
+                <td th:utext="${mineralsToView.getLetterChemyakin()}">Вставка Шемякин</td>
+                <td th:utext="${mineralsToView.getLetterBallet()}">Вставка балет</td>
+
+                <td>
+                    <a th:href="@{/article/mineral/delete/{id}(id = ${mineralsToView.getId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+</body>
+</html>

@@ -78,7 +78,8 @@ public class PriorityController {
         if (validationResult.hasErrors()) {
             return "editPriority";
         }
-        if (priorityRepository.findPriorityByPriorityType(priority.getPriorityType()) != null) {
+        if (priorityRepository.findPriorityByPriorityType(priority.getPriorityType()) != null &&
+                !priority.getPriorityType().equals(priorityRepository.findPriorityById(id).getPriorityType())) {
             validationResult.addError(new FieldError("priority", "priorityType",
                     "Такая запись уже есть в базе"));
             return "editPriority";

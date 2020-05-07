@@ -3,45 +3,49 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Регистрация пользователя</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
 </head>
 <body>
 <th:block th:include="/_adminMenu">menu</th:block>
 
-<form th:action="@{/admin/users/add}" method="post" enctype="application/x-www-form-urlencoded">
+<form th:action="@{/admin/users/add}" method="post" enctype="application/x-www-form-urlencoded" th:object="${form}">
 
-    <p>
-        <label>
-            Login:
-            <input type="text" name="login"/>
-    <p th:if="${#fields.hasErrors('${form.login}')}" th:errors="*{form.login}" th:class="'error'" style="color: red"> Ошибка</p>
+    <div class="input_pages">
 
-    </label>
+        <div class="form-group">
+            <label for="customerName">Логин:</label>
+            <input type="text" th:value="${form.login}" th:name="login" class="form-control" id="customerName">
+            <p th:if="${#fields.hasErrors('login')}" th:errors="*{login}" th:class="'error'" style="color: red">
+                Ошибка</p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="customerCity">Пароль:</label>
+            <input type="text" th:value="${form.password}" th:name="password" class="form-control" id="customerCity">
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:class="'error'" style="color: red">
+                Ошибка города</p>
+        </div>
 
-    </p>
-    <p>
-        <label>
-            Password:
-            <input type="password" name="password"/>
-    <p th:if="${#fields.hasErrors('${form.password}')}" th:errors="*{form.password}" th:class="'error'" style="color: red">
-        Ошибка</p>
 
-    </label>
-    </p>
-
-    <p>
-        <label for="UserRole">
+        <div class="form-group">
+            <label for="UserRole"> Уровень доступа </label>
             <select name="role" id="UserRole">
                 <tr th:each="role : ${roles}">
                     <option th:text="${role}"></option>
                 </tr>
             </select>
-    <p th:if="${#fields.hasErrors('${form.role}')}" th:errors="*{form.role}" th:class="'error'" style="color: red"> Ошибка</p>
-    </label>
-    </p>
-    <p>
-        <input type="submit">
-    </p>
+            <p th:if="${#fields.hasErrors('${form.role}')}" th:errors="*{role}" th:class="'error'"
+               style="color: red"> Ошибка</p>
+
+
+            <p>
+                <input type="submit">
+            </p>
+        </div>
+    </div>
 </form>
 
 </body>
