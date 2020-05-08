@@ -15,11 +15,17 @@ import java.util.List;
 public interface ArticleRepository extends PagingAndSortingRepository<Article, Integer> {
     List<Article> findArticlesByMetalType(MetalType metalType);
 
-    List<Article> findArticlesByArticle(String articleName);
+    List<Article> findArticlesByArticleName(String articleName);
 
     List<Article> findArticlesByCollectionType(CollectionType collectionType);
 
     @Query("SELECT a from Article a WHERE a.averageWeight < :maxWeight AND a.averageWeight > :minWeight")
     List<Article> findArticlesByAverageWeightIsBetween(double minWeight, double maxWeight);
+
+    @Query("SELECT a from Article a")
+    List<Article> findAllArticles();
+
+    Article findArticleByArticleNameAndMetalType(String article, MetalType metalType);
+    Article findArticleByArticleId(long articleId);
 
 }

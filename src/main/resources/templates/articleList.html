@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Артикулы</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <!-- <link rel="stylesheet"
+           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+     <link rel="stylesheet"
+           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>-->
+</head>
+<body>
+
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/articles}" method="post" enctype="application/x-www-form-urlencoded">
+
+    <a th:href="@{/article/add}">
+
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+    </a>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+
+                <th scope="col">№</th>
+                <th scope="col"></th>
+
+                <th scope="col">Артикул</th>
+                <th scope="col">Металл</th>
+                <th scope="col">Проба</th>
+                <th scope="col">Средний вес</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Коллекция</th>
+                <th scope="col">Вставки</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="articleToView : ${allArticlesList}">
+                <td th:utext="${articleToViewStat.index+1}">№</td>
+                <td style="vertical-align: top">
+
+                    <a th:href="@{/article/{articleId}(articleId = ${articleToView.getArticleId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </a>
+
+                </td>
+                <td th:utext="${articleToView.getArticleName()}">Артикул</td>
+                <td th:utext="${articleToView.getMetalType()?.getMetalTypeName()}">Металл</td>
+                <td th:utext="${articleToView.getMetalType()?.getHallmark()}">Проба</td>
+                <td th:utext="${articleToView.getAverageWeight()}">Средний вес</td>
+                <td th:utext="${articleToView.getCost()}">Цена</td>
+                <td th:utext="${articleToView.getCollectionType()}">Коллекция</td>
+                <td th:utext="${articleToView.getMinerals()}">Вставки</td>
+
+                <td>
+                    <a th:href="@{/article/delete/{articleId}(articleId = ${articleToView.getArticleId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+
+</body>
+</html>

@@ -56,4 +56,9 @@ public class MetalType {
     public void setHallmark(int hallmark) {
         this.hallmark = hallmark;
     }
+
+    @Override
+    public String toString() {
+        return  metalTypeName + " " + hallmark ;
+    }
 }

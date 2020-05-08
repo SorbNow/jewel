@@ -75,4 +75,9 @@ public class Mineral {
     public void setLetterBallet(String letterBallet) {
         this.letterBallet = letterBallet;
     }
+
+    @Override
+    public String toString() {
+        return insert;
+    }
 }

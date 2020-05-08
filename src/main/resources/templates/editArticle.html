@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение артикула</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-select.css}"/>
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/article/{articleId}(articleId = ${article.getArticleId()})}" method="post" th:object="${article}" enctype="application/x-www-form-urlencoded">
+
+    <div class="input_pages">
+
+        <div class="form-group">
+            <label for="articleNameString">Артикул:</label>
+            <input type="text" th:value="${article.articleName}" th:name="articleName" class="form-control" id="articleNameString">
+            <p th:if="${#fields.hasErrors('articleName')}" th:errors="*{articleName}" th:class="'error'" style="color: red"> Ошибка</p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="MetalForArticle">Металл:</label>
+            <select class="form-control" id="MetalForArticle" th:name="metalType">
+                <option th:each="metalTyp : ${metalTypeList}"
+                        th:value="${metalTyp.id}"
+                        th:text="${metalTyp.metalTypeName} + ' ' + ${metalTyp.hallmark}"
+                th:selected="${metalTyp == article.metalType}"></option>
+            </select>
+            <p th:if="${#fields.hasErrors('metalType')}" th:errors="*{metalType}" th:class="'error'" style="color: red"> Ошибка</p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="averWeight">Средний вес:</label>
+            <input type="text" th:value="${article.averageWeight}" th:name="averageWeight"  class="form-control" id="averWeight">
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="articleCost">Цена:</label>
+            <input type="text" th:value="${article.cost}" th:name="cost"  class="form-control" id="articleCost">
+            <p th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}" th:class="'error'" style="color: red"> Ошибка </p>
+        </div>
+        <p></p>
+        <div class="form-group">
+            <label for="colTypes">Коллекция:</label>
+            <select class="form-control" id="colTypes" th:name="collectionType">
+                <option th:each="collType : ${collectionTypesList}" th:text="${collType}" th:selected="${collType == article.collectionType}"></option>
+            </select>
+            <p th:if="${#fields.hasErrors('collectionType')}" th:errors="*{collectionType}" th:class="'error'" style="color: red"> Ошибка </p>
+        </div>
+        <div>
+        <label for="insertsSelect">Вставки:</label>
+        <select class="form-control " id="insertsSelect" th:name="minerals" th:multiple="multiple">
+            <option th:each="insert : ${insertsList}"
+                    th:value="${insert.id}"
+                    th:text="${insert.insert}"
+                    th:selected="${article.minerals.contains(insert)}"
+            ></option>
+        </select>
+        <p th:if="${#fields.hasErrors('minerals')}" th:errors="*{minerals}" th:class="'error'" style="color: red"> Ошибка </p>
+    </div>
+        <p>
+            <input type="submit">
+        </p>
+    </div>
+</form>
+
+</body>
+</html>

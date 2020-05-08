@@ -2,26 +2,35 @@ package org.jewel.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"article","metalType"}))
+@Table
+//(uniqueConstraints = @UniqueConstraint(columnNames = {"articleName","metalType"}))
 public class Article {
 
     @Id
     @GeneratedValue
-    private long id;
+    private long articleId;
 
     //can't be unique because same article may be in white or yellow gold. gold may be 585 or 750
     //maybe use uniqueconstraints? 3 columns: article,hallmark,metaltype
     @Column(nullable = false)
-    private String article;
+    @NotBlank(message = "Поле не может быть пустым")
+    private String articleName;
 
-    @ManyToOne
+
+    @Column(unique = true, nullable = false)
+    private String dummyArticleName;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "metalType")
     private MetalType metalType;
 
     @Column
+    @PositiveOrZero(message = "Значение не может быть отрицательным")
     private double averageWeight;
 
     @Column
@@ -52,20 +61,20 @@ public class Article {
         this.cost = cost;
     }
 
-    public long getId() {
-        return id;
+    public long getArticleId() {
+        return articleId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setArticleId(long articleId) {
+        this.articleId = articleId;
     }
 
-    public String getArticle() {
-        return article;
+    public String getArticleName() {
+        return articleName;
     }
 
-    public void setArticle(String article) {
-        this.article = article;
+    public void setArticleName(String article) {
+        this.articleName = article;
     }
 
     public MetalType getMetalType() {
@@ -99,4 +108,13 @@ public class Article {
     public void setCollectionType(CollectionType collectionType) {
         this.collectionType = collectionType;
     }
+
+    public String getDummyArticleName() {
+        return dummyArticleName;
+    }
+
+    public void setDummyArticleName(String dummyArticleName) {
+        this.dummyArticleName = dummyArticleName;
+    }
+
 }
