@@ -36,6 +36,11 @@ public class Article {
     @Column
     private double cost;
 
+    @Column
+    @PositiveOrZero(message = "Поле не может иметь отрицательное значение")
+    private int productionTime;
+
+
     @Enumerated
     private CollectionType collectionType;
 
@@ -115,6 +120,14 @@ public class Article {
 
     public void setDummyArticleName(String dummyArticleName) {
         this.dummyArticleName = dummyArticleName;
+    }
+
+    public int getProductionTime() {
+        return productionTime;
+    }
+
+    public void setProductionTime(int productionTime) {
+        this.productionTime = productionTime;
     }
 
 }

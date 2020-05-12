@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление заказа</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/order/add}" method="post" enctype="application/x-www-form-urlencoded">
+
+    <div class="input_pages">
+
+        <div class="form-group">
+            <label for="insertName">Номер заказа :</label>
+            <input type="text" th:value="${order.orderNumber}" th:name="orderNumber"  class="form-control" id="insertName">
+<!--            <p th:if="${#fields.hasErrors('orderNumber')}" th:errors="${order.orderNumber}" th:class="'error'" style="color: red"> Ошибка</p>-->
+        </div>
+
+        <div>
+            <label for="insertsSelect">Артикулы:</label>
+            <p></p>
+            <select class="selectpicker" id="insertsSelect" th:name="articles" data-size="7" title="Choose one of the following..." data-live-search="true" multiple>
+                <option th:each="article : ${articleList}"
+                        th:value="${article.articleId}"
+                        th:text="${article.articleName}"
+                ></option>
+            </select>
+        </div>
+        <p>
+            <input type="submit">
+        </p>
+    </div>
+</form>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.17/dist/js/bootstrap-select.min.js"></script>
+</body>
+</html>

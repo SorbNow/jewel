@@ -1,14 +1,17 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Order {
-    @GeneratedValue
+@Table
+public class ArticleOrder {
+
     @Id
-    private long id;
+    @GeneratedValue
+    private long orderId;
 
     @Column
     private int orderNumber;
@@ -16,20 +19,18 @@ public class Order {
     @ManyToOne
     private Priority priority;
 
+    @OneToMany
+    private List<ArticleInOrder> articleInOrder;
+
     @Column
-    private Date addOrderDate;
+//    @Temporal(TemporalType.DATE)
+    private LocalDate addOrderDate;
 
     @Enumerated
     private OrderCondition orderCondition;
 
-    @OneToMany
+    @ManyToMany
     private List<Article> articles;
-
-    @Column
-    private int count;
-
-    @Column
-    private int size;
 
     @OneToMany
     private List<Mineral> minerals;
@@ -41,13 +42,16 @@ public class Order {
     private String comment;
 
     @Column
-    private Date expectedDate;
+//    @Temporal(TemporalType.DATE)
+    private LocalDate expectedDate;
 
     @Column
-    private Date moldedDate;
+//    @Temporal(TemporalType.DATE)
+    private LocalDate moldedDate;
 
     @Column
-    private Date expectedDateFromMolded;
+//    @Temporal(TemporalType.DATE)
+    private LocalDate expectedDateFromMolded;
 
     @Column
     private int countDaysFromAddOrder;
@@ -65,20 +69,21 @@ public class Order {
     private int countNotDone;
 
     @Column
+//    @Temporal(TemporalType.DATE)
     private Date lastDateIncome;
 
     @Column
     private String privateComment;
 
-    @OneToMany
-    private List<DoneArticleFromOrder> doneArticleFromOrders;
+//    @OneToMany
+//    private List<DoneArticleFromOrder> doneArticleFromOrders;
 
-    public long getId() {
-        return id;
+    public long getOrderId() {
+        return orderId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public int getOrderNumber() {
@@ -97,11 +102,11 @@ public class Order {
         this.priority = priority;
     }
 
-    public Date getAddOrderDate() {
+    public LocalDate getAddOrderDate() {
         return addOrderDate;
     }
 
-    public void setAddOrderDate(Date addOrderDate) {
+    public void setAddOrderDate(LocalDate addOrderDate) {
         this.addOrderDate = addOrderDate;
     }
 
@@ -119,22 +124,6 @@ public class Order {
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
     }
 
     public List<Mineral> getMinerals() {
@@ -161,27 +150,27 @@ public class Order {
         this.comment = comment;
     }
 
-    public Date getExpectedDate() {
+    public LocalDate getExpectedDate() {
         return expectedDate;
     }
 
-    public void setExpectedDate(Date expectedDate) {
+    public void setExpectedDate(LocalDate expectedDate) {
         this.expectedDate = expectedDate;
     }
 
-    public Date getMoldedDate() {
+    public LocalDate getMoldedDate() {
         return moldedDate;
     }
 
-    public void setMoldedDate(Date moldedDate) {
+    public void setMoldedDate(LocalDate moldedDate) {
         this.moldedDate = moldedDate;
     }
 
-    public Date getExpectedDateFromMolded() {
+    public LocalDate getExpectedDateFromMolded() {
         return expectedDateFromMolded;
     }
 
-    public void setExpectedDateFromMolded(Date expectedDateFromMolded) {
+    public void setExpectedDateFromMolded(LocalDate expectedDateFromMolded) {
         this.expectedDateFromMolded = expectedDateFromMolded;
     }
 
@@ -241,11 +230,12 @@ public class Order {
         this.privateComment = privateComment;
     }
 
-    public List<DoneArticleFromOrder> getDoneArticleFromOrders() {
+   /* public List<DoneArticleFromOrder> getDoneArticleFromOrders() {
         return doneArticleFromOrders;
     }
 
     public void setDoneArticleFromOrders(List<DoneArticleFromOrder> doneArticleFromOrders) {
         this.doneArticleFromOrders = doneArticleFromOrders;
     }
+*/
 }

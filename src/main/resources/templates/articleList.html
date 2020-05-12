@@ -37,6 +37,7 @@
                 <th scope="col">Проба</th>
                 <th scope="col">Средний вес</th>
                 <th scope="col">Цена</th>
+                <th scope="col">Срок изготовления, дней</th>
                 <th scope="col">Коллекция</th>
                 <th scope="col">Вставки</th>
                 <th scope="col"></th>
@@ -60,6 +61,7 @@
                 <td th:utext="${articleToView.getMetalType()?.getHallmark()}">Проба</td>
                 <td th:utext="${articleToView.getAverageWeight()}">Средний вес</td>
                 <td th:utext="${articleToView.getCost()}">Цена</td>
+                <td th:utext="${articleToView.getProductionTime()}">Срок изготовления</td>
                 <td th:utext="${articleToView.getCollectionType()}">Коллекция</td>
                 <td th:utext="${articleToView.getMinerals()}">Вставки</td>
 

@@ -67,9 +67,17 @@ public class ArticleController {
                              Article article,
                              BindingResult validationResult) {
 
+        if (article.getMetalType() == null) {
+            validationResult.addError(new FieldError("article", "metalType",
+                    "Поле обязательно для заполнения"));
+            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("collectionTypesList", CollectionType.values());
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            return "addArticle";
+        }
         article.setArticleName(article.getArticleName().trim());
         article.setDummyArticleName(article.getArticleName()+article.getMetalType().getMetalTypeName()+article.getMetalType().getHallmark());
-    //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
+        //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
         if (validationResult.hasErrors()) {
             modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
@@ -112,6 +120,14 @@ public class ArticleController {
                                           MetalType metalType,
                                   BindingResult metalTypeValidResult
                                  ) {
+        if (article.getMetalType() == null) {
+            validationResult.addError(new FieldError("article", "metalType",
+                    "Поле обязательно для заполнения"));
+            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("collectionTypesList", CollectionType.values());
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            return "addArticle";
+        }
 //        metalType=metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark());
         article.setArticleName(article.getArticleName().trim());
         article.setDummyArticleName(article.getArticleName()+article.getMetalType().getMetalTypeName()+article.getMetalType().getHallmark());

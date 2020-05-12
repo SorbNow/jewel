@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @RepositoryRestResource(collectionResourceRel = "articles", itemResourceRel = "articles", path = "articles")
-public interface ArticleRepository extends PagingAndSortingRepository<Article, Integer> {
+public interface ArticleRepository extends PagingAndSortingRepository<Article, Long> {
     List<Article> findArticlesByMetalType(MetalType metalType);
 
     List<Article> findArticlesByArticleName(String articleName);
