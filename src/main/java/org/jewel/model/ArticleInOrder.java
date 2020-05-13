@@ -2,6 +2,7 @@ package org.jewel.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,9 @@ public class ArticleInOrder {
 
     @Column
     private String articleOrder;
+
+    @ManyToOne
+    private Article article;
 
     @Column
     @Positive(message = "Значение должно быть положительным")
@@ -32,10 +36,10 @@ public class ArticleInOrder {
     joinColumns = {@JoinColumn(name = "article_in_order_done_id") })
     @MapKeyColumn(name = "done_date")
     @Column(name="done_count")
-    private Map<Date, Integer> dateAndCountDone;
+    private Map<LocalDate, Integer> dateAndCountDone;
 
     @Column
-    private Date lastDate;
+    private LocalDate lastDate;
 
     public long getArticleInOrderId() {
         return articleInOrderId;
@@ -77,19 +81,27 @@ public class ArticleInOrder {
         this.size = size;
     }
 
-    public Map<Date, Integer> getDateAndCountDone() {
+    public Map<LocalDate, Integer> getDateAndCountDone() {
         return dateAndCountDone;
     }
 
-    public void setDateAndCountDone(Map<Date, Integer> dateAndCountDone) {
+    public void setDateAndCountDone(Map<LocalDate, Integer> dateAndCountDone) {
         this.dateAndCountDone = dateAndCountDone;
     }
 
-    public Date getLastDate() {
+    public LocalDate getLastDate() {
         return lastDate;
     }
 
-    public void setLastDate(Date lastDate) {
+    public void setLastDate(LocalDate lastDate) {
         this.lastDate = lastDate;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
     }
 }

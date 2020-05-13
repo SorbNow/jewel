@@ -17,20 +17,48 @@
     <div class="input_pages">
 
         <div class="form-group">
-            <label for="insertName">Номер заказа :</label>
-            <input type="text" th:value="${order.orderNumber}" th:name="orderNumber"  class="form-control" id="insertName">
+            <label for="orderNumInput">Номер заказа :</label>
+            <input type="text" th:value="${order.orderNumber}" th:name="orderNumber"  class="form-control" id="orderNumInput">
 <!--            <p th:if="${#fields.hasErrors('orderNumber')}" th:errors="${order.orderNumber}" th:class="'error'" style="color: red"> Ошибка</p>-->
         </div>
 
         <div>
-            <label for="insertsSelect">Артикулы:</label>
+            <label for="prioritySelect">Приоритет:</label>
+            <select class="form-control " id="prioritySelect" th:name="priority" title="Выберите приоритет">
+                <option th:each="priorityVal : ${priorityList}"
+                        th:text="${priorityVal}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="articleSelect">Артикулы:</label>
             <p></p>
-            <select class="selectpicker" id="insertsSelect" th:name="articles" data-size="7" title="Choose one of the following..." data-live-search="true" multiple>
+            <select class="selectpicker" id="articleSelect" th:name="articles" data-size="7" title="Выберите артикулы" data-live-search="true" multiple>
+
                 <option th:each="article : ${articleList}"
                         th:value="${article.articleId}"
                         th:text="${article.articleName}"
                 ></option>
             </select>
+        </div>
+
+        <div>
+            <label for="customerSelect">Подразделение, оформившее заказ:</label>
+            <select class="form-control " id="customerSelect" th:name="customer" title="Выберите подразделение">
+                <option th:each="customerToView : ${customersList}"
+                        th:value="${customerToView.id}"
+                        th:text="${customerToView.customerName}"></option>
+            </select>
+        </div>
+
+            <div class="form-group">
+                <label for="commentInput">Комментарий:</label>
+                <input type="text" th:value="${order.comment}" th:name="comment"  class="form-control" id="commentInput">
+                <!--            <p th:if="${#fields.hasErrors('orderNumber')}" th:errors="${order.orderNumber}" th:class="'error'" style="color: red"> Ошибка</p>-->
+            </div>
+        <div class="form-group">
+            <label for="privateCommentInput">Дополнительный(скрытый) комментарий:</label>
+            <input type="text" th:value="${order.comment}" th:name="privateComment"  class="form-control" id="privateCommentInput">
+            <!--            <p th:if="${#fields.hasErrors('orderNumber')}" th:errors="${order.orderNumber}" th:class="'error'" style="color: red"> Ошибка</p>-->
         </div>
         <p>
             <input type="submit">

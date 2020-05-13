@@ -14,7 +14,7 @@ public class ArticleOrder {
     private long orderId;
 
     @Column
-    private int orderNumber;
+    private String orderNumber;
 
     @ManyToOne
     private Priority priority;
@@ -31,9 +31,6 @@ public class ArticleOrder {
 
     @ManyToMany
     private List<Article> articles;
-
-    @OneToMany
-    private List<Mineral> minerals;
 
     @ManyToOne
     private Customer customer;
@@ -86,11 +83,11 @@ public class ArticleOrder {
         this.orderId = orderId;
     }
 
-    public int getOrderNumber() {
+    public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(int orderNumber) {
+    public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
@@ -124,14 +121,6 @@ public class ArticleOrder {
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
-    }
-
-    public List<Mineral> getMinerals() {
-        return minerals;
-    }
-
-    public void setMinerals(List<Mineral> minerals) {
-        this.minerals = minerals;
     }
 
     public Customer getCustomer() {
@@ -238,4 +227,12 @@ public class ArticleOrder {
         this.doneArticleFromOrders = doneArticleFromOrders;
     }
 */
+
+    public List<ArticleInOrder> getArticleInOrder() {
+        return articleInOrder;
+    }
+
+    public void setArticleInOrder(List<ArticleInOrder> articleInOrder) {
+        this.articleInOrder = articleInOrder;
+    }
 }
