@@ -1,25 +1,28 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"articleOrder","article"}))
 public class ArticleInOrder {
 
     @Id
     @GeneratedValue
     private long articleInOrderId;
 
-    @Column
+    @Column(nullable = false)
+    @NotBlank
     private String articleOrder;
 
-    @ManyToOne
-    private Article article;
+    @Column
+    private String article;
+
+//    @Column(unique = true)
+//    private String dummyForUnique;
 
     @Column
     @Positive(message = "Значение должно быть положительным")
@@ -97,11 +100,19 @@ public class ArticleInOrder {
         this.lastDate = lastDate;
     }
 
-    public Article getArticle() {
+    public String getArticle() {
         return article;
     }
 
-    public void setArticle(Article article) {
+    public void setArticle(String article) {
         this.article = article;
     }
+
+//    public String getDummyForUnique() {
+//        return dummyForUnique;
+//    }
+//
+//    public void setDummyForUnique(String dummyForUnique) {
+//        this.dummyForUnique = dummyForUnique;
+//    }
 }

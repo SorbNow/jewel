@@ -1,6 +1,7 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ public class ArticleOrder {
     @ManyToOne
     private Priority priority;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<ArticleInOrder> articleInOrder;
 
     @Column
@@ -30,6 +31,7 @@ public class ArticleOrder {
     private OrderCondition orderCondition;
 
     @ManyToMany
+    @NotNull(message = "Выберите минимум 1 артикул")
     private List<Article> articles;
 
     @ManyToOne

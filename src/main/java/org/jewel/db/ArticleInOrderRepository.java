@@ -10,9 +10,13 @@ import java.util.List;
 
 @Repository
 @RepositoryRestResource(collectionResourceRel = "articlesInOrders", itemResourceRel = "articlesInOrders", path = "articlesInOrders")
-public interface ArticleInOrderRepository extends PagingAndSortingRepository<ArticleInOrder, Integer> {
+public interface ArticleInOrderRepository extends PagingAndSortingRepository<ArticleInOrder, Long> {
 
     @Query("SELECT a from ArticleInOrder a")
     List<ArticleInOrder> findAllArticlesInOrders();
+
+    List<ArticleInOrder> findArticleInOrdersByArticleOrder(String articleOrder);
+
+    ArticleInOrder findArticleInOrderByArticleAndArticleOrder(String article,String articleOrder);
 
 }

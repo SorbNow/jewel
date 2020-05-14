@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление заказа</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+</head>
+<body>
+<th:block th:include="/_adminMenu"/>
+<form th:action="@{/order/articlesCount}" method="post" enctype="application/x-www-form-urlencoded">
+    <fieldset>
+        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+        <table>
+            <thead>
+            <tr>
+                <th> Артикул</th>
+                <th> Количество</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="articleView, itemStat : *{order.articleInOrder}">
+                <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].article}" /></td>
+                <td><input th:field="${order.articleInOrder[__${itemStat.index}__].count}" /></td>
+                <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].articleOrder}" hidden></td>
+                <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].articleInOrderId}" hidden></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <p>
+        <input type="submit" class="btn btn-primary"/>
+    </p>
+</form>
+
+</body>
+</html>
