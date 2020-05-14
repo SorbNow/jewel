@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/custom.css}"/>
 </head>
 <body>
-<th:block th:include="/adminMenu">menu</th:block>
+<th:block th:include="/_adminMenu">menu</th:block>
 
 <form th:action="@{/admin/users/add}" method="post" enctype="application/x-www-form-urlencoded" th:object="${form}">
 
