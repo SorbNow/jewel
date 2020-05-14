@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/custom.css}"/>
 </head>
 <body>
-<th:block th:include="/_adminMenu"/>
+<th:block th:include="/adminMenu"/>
 <form th:action="@{/article/mineral/{id}(id = ${mineral.getId()})}" method="post" th:object="${mineral}"
       enctype="application/x-www-form-urlencoded">
 
