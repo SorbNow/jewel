@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap-select.css}"/>
 </head>
 <body>
-<th:block th:include="~{/_adminMenu}"/>
+<th:block th:include="~{_adminMenu}"/>
 
 <form th:action="@{/article/{articleId}(articleId = ${article.getArticleId()})}" method="post" th:object="${article}" enctype="application/x-www-form-urlencoded">
 
