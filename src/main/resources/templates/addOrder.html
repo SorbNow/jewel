@@ -27,7 +27,8 @@
             <label for="prioritySelect">Приоритет:</label>
             <select class="form-control " id="prioritySelect" th:name="priority" title="Выберите приоритет">
                 <option th:each="priorityVal : ${priorityList}"
-                        th:text="${priorityVal}"></option>
+                        th:value="${priorityVal.id}"
+                        th:text="${priorityVal.priorityType}"></option>
             </select>
         </div>
         <div>
@@ -36,6 +37,7 @@
             <select class="selectpicker" id="articleSelect" th:name="articles" data-size="7" title="Выберите артикулы" data-live-search="true" multiple>
 
                 <option th:each="article : ${articleList}"
+
                         th:value="${article.articleId}"
                         th:text="${article.articleName}"
                 ></option>

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +54,12 @@ public class ArticleOrderController {
     @GetMapping(path = "/orders")
     public String getOrdersList(ModelMap modelMap) {
         List<ArticleOrder> orderList = orderRepository.findAllOrders();
-
-
+        DateTimeFormatter europeanDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         modelMap.addAttribute("orderList", orderList);
+        modelMap.addAttribute("dateFormatter", europeanDateFormatter);
+        modelMap.addAttribute("today", LocalDate.now());
+        modelMap.addAttribute("days", ChronoUnit.DAYS);
+
         return "orderList";
     }
 
@@ -134,11 +139,11 @@ public class ArticleOrderController {
     public String deleteArticle(@PathVariable(name = "orderId") long orderId) {
         ArticleOrder order= orderRepository.findArticleOrderByOrderId(orderId);
         List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
+        orderRepository.delete(order);
         for (ArticleInOrder a:articleInOrderList) {
             articleInOrderRepository.delete(a);
         }
-        orderRepository.delete(order);
-        return "redirect:/articles";
+        return "redirect:/orders";
     }
 
     @GetMapping(path = "/order/{orderId}")
