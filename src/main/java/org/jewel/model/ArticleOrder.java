@@ -14,7 +14,7 @@ public class ArticleOrder {
     @GeneratedValue
     private long orderId;
 
-    @Column
+    @Column(unique = true,nullable = false)
     private String orderNumber;
 
     @ManyToOne

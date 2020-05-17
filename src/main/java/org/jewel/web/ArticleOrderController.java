@@ -59,6 +59,10 @@ public class ArticleOrderController {
         modelMap.addAttribute("dateFormatter", europeanDateFormatter);
         modelMap.addAttribute("today", LocalDate.now());
         modelMap.addAttribute("days", ChronoUnit.DAYS);
+        modelMap.addAttribute("conAdded", OrderCondition.ADDED);
+        modelMap.addAttribute("conCanceled", OrderCondition.CANCELED);
+        modelMap.addAttribute("conMolded", OrderCondition.MOLDED);
+        modelMap.addAttribute("conProcess", OrderCondition.PROCESSING);
 
         return "orderList";
     }
@@ -174,9 +178,36 @@ public class ArticleOrderController {
                 articleInOrder.setArticle(a.getArticleName());
                 articleInOrder.setCount(1);
                 articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
+                orderRepository.save(order);
             }
         }
+        List<ArticleInOrder> articleInOrderList = order.getArticleInOrder();
+        List<ArticleInOrder> articleInOrderToDelete = new ArrayList<>();
+        for (int i = 0;i<articleInOrderList.size();i++) {
+            boolean isInOrder=false;
+            for (Article a:order.getArticles()) {
+                if (a.getArticleName().equals(articleInOrderList.get(i).getArticle())) {
+                    isInOrder = true;
+                    break;
+                }
+            }
+            if (!isInOrder) {
+
+                articleInOrderToDelete.add( articleInOrderList.get(i));
+                articleInOrderList.remove(articleInOrderList.get(i));
+                order.setArticleInOrder(articleInOrderList);
+                i--;
+
+//               orderRepository.save(order);
+//                articleInOrderRepository.delete(ArticleInOrderToDelete);
+            }
+        }
+        /*order.setArticleInOrder(articleInOrderList);*/
         orderRepository.save(order);
+        if (!articleInOrderToDelete.isEmpty()) {
+            for (ArticleInOrder articleInOrderInd:articleInOrderToDelete)
+            articleInOrderRepository.delete(articleInOrderInd);
+        }
         redirectAttributes.addAttribute("orderId",order.getOrderId());
         return "redirect:/order/articlesCount";
     }
