@@ -52,6 +52,12 @@
         </div>
         <p></p>
         <div class="form-group">
+            <label for="moldTime">Срок изготовления артикула после отливки, дней:</label>
+            <input type="text" th:value="${article.productionTimeFromMolded}" th:name="productionTimeFromMolded"  class="form-control" id="moldTime">
+            <p th:if="${#fields.hasErrors('productionTimeFromMolded')}" th:errors="*{productionTimeFromMolded}" th:class="'error'" style="color: red"> Ошибка </p>
+        </div>
+        <p></p>
+        <div class="form-group">
             <label for="colTypes">Коллекция:</label>
             <select class="form-control" id="colTypes" th:name="collectionType">
             <option th:each="collType : ${collectionTypesList}" th:text="${collType}"></option>

@@ -14,7 +14,7 @@ public class ArticleOrder {
     @GeneratedValue
     private long orderId;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String orderNumber;
 
     @ManyToOne
@@ -23,9 +23,7 @@ public class ArticleOrder {
     @OneToMany(fetch = FetchType.EAGER)
     private List<ArticleInOrder> articleInOrder;
 
-    @Column
-//    @Temporal(TemporalType.DATE)
-    private LocalDate addOrderDate;
+
 
     @Enumerated
     private OrderCondition orderCondition;
@@ -40,17 +38,6 @@ public class ArticleOrder {
     @Column
     private String comment;
 
-    @Column
-//    @Temporal(TemporalType.DATE)
-    private LocalDate expectedDate;
-
-    @Column
-//    @Temporal(TemporalType.DATE)
-    private LocalDate moldedDate;
-
-    @Column
-//    @Temporal(TemporalType.DATE)
-    private LocalDate expectedDateFromMolded;
 
     @Column
     private int countDaysFromAddOrder;
@@ -74,7 +61,17 @@ public class ArticleOrder {
     @Column
     private String privateComment;
 
-//    @OneToMany
+    @Column
+    private LocalDate finishedDate;
+
+    public LocalDate getFinishedDate() {
+        return finishedDate;
+    }
+
+    public void setFinishedDate(LocalDate finishedDate) {
+        this.finishedDate = finishedDate;
+    }
+    //    @OneToMany
 //    private List<DoneArticleFromOrder> doneArticleFromOrders;
 
     public long getOrderId() {
@@ -99,14 +96,6 @@ public class ArticleOrder {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
-    }
-
-    public LocalDate getAddOrderDate() {
-        return addOrderDate;
-    }
-
-    public void setAddOrderDate(LocalDate addOrderDate) {
-        this.addOrderDate = addOrderDate;
     }
 
     public OrderCondition getOrderCondition() {
@@ -139,30 +128,6 @@ public class ArticleOrder {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public LocalDate getExpectedDate() {
-        return expectedDate;
-    }
-
-    public void setExpectedDate(LocalDate expectedDate) {
-        this.expectedDate = expectedDate;
-    }
-
-    public LocalDate getMoldedDate() {
-        return moldedDate;
-    }
-
-    public void setMoldedDate(LocalDate moldedDate) {
-        this.moldedDate = moldedDate;
-    }
-
-    public LocalDate getExpectedDateFromMolded() {
-        return expectedDateFromMolded;
-    }
-
-    public void setExpectedDateFromMolded(LocalDate expectedDateFromMolded) {
-        this.expectedDateFromMolded = expectedDateFromMolded;
     }
 
     public int getCountDaysFromAddOrder() {
@@ -236,5 +201,13 @@ public class ArticleOrder {
 
     public void setArticleInOrder(List<ArticleInOrder> articleInOrder) {
         this.articleInOrder = articleInOrder;
+    }
+
+    public int getMaxProductionTimeFromMolded() {
+        int max = 0;
+        for (Article a : articles) {
+            if (a.getProductionTimeFromMolded()>max){max=a.getProductionTimeFromMolded();}
+        }
+        return max;
     }
 }

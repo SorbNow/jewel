@@ -39,7 +39,9 @@ public class Article {
     @Column
     @PositiveOrZero(message = "Поле не может иметь отрицательное значение")
     private int productionTime;
-
+    @Column
+    @PositiveOrZero(message = "Поле не может иметь отрицательное значение")
+    private int productionTimeFromMolded;
 
     @Enumerated
     private CollectionType collectionType;
@@ -130,4 +132,11 @@ public class Article {
         this.productionTime = productionTime;
     }
 
+    public int getProductionTimeFromMolded() {
+        return productionTimeFromMolded;
+    }
+
+    public void setProductionTimeFromMolded(int productionTimeFromMolded) {
+        this.productionTimeFromMolded = productionTimeFromMolded;
+    }
 }

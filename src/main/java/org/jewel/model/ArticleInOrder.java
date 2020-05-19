@@ -43,6 +43,21 @@ public class ArticleInOrder {
 
     @Column
     private LocalDate lastDate;
+    @Column
+//    @Temporal(TemporalType.DATE)
+    private LocalDate addOrderDate;
+
+    @Column
+//    @Temporal(TemporalType.DATE)
+    private LocalDate expectedDate;
+
+    @Column
+//    @Temporal(TemporalType.DATE)
+    private LocalDate moldedDate;
+
+    @Column
+//    @Temporal(TemporalType.DATE)
+    private LocalDate expectedDateFromMolded;
 
     public long getArticleInOrderId() {
         return articleInOrderId;
@@ -115,4 +130,37 @@ public class ArticleInOrder {
 //    public void setDummyForUnique(String dummyForUnique) {
 //        this.dummyForUnique = dummyForUnique;
 //    }
+
+
+    public LocalDate getAddOrderDate() {
+        return addOrderDate;
+    }
+
+    public void setAddOrderDate(LocalDate addOrderDate) {
+        this.addOrderDate = addOrderDate;
+    }
+
+    public LocalDate getExpectedDate() {
+        return expectedDate;
+    }
+
+    public void setExpectedDate(LocalDate expectedDate) {
+        this.expectedDate = expectedDate;
+    }
+
+    public LocalDate getMoldedDate() {
+        return moldedDate;
+    }
+
+    public void setMoldedDate(LocalDate moldedDate) {
+        this.moldedDate = moldedDate;
+    }
+
+    public LocalDate getExpectedDateFromMolded() {
+        return expectedDateFromMolded;
+    }
+
+    public void setExpectedDateFromMolded(LocalDate expectedDateFromMolded) {
+        this.expectedDateFromMolded = expectedDateFromMolded;
+    }
 }

@@ -17,4 +17,22 @@ public enum OrderCondition {
     public String getTitle() {
         return title;
     }
+
+    public OrderCondition changeConditionToNext(OrderCondition condition) {
+        switch (condition) {
+            case ADDED: {
+                condition = MOLDED;
+                break;
+            }
+            case MOLDED: {
+                condition = FINISHED;
+                break;
+            }
+            default: {
+                condition = ADDED;
+                break;
+            }
+        }
+        return condition;
+    }
 }

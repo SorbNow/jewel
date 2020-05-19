@@ -73,17 +73,17 @@ public class ArticleOrderController {
         modelMap.addAttribute("order", order);
         modelMap.addAttribute("articleList", articleRepository.findAllArticles());
         modelMap.addAttribute("priorityList", getPriorityList());
-        modelMap.addAttribute("customersList", getCustomerList() );
+        modelMap.addAttribute("customersList", getCustomerList());
         return "addOrder";
     }
 
     @PostMapping(path = "/order/add")
-    public String addOrderPost( RedirectAttributes redirectAttributes,
-            ModelMap mod,
-            @Validated
-            @ModelAttribute("order")
-                    ArticleOrder order,
-                                BindingResult validationResult) {
+    public String addOrderPost(RedirectAttributes redirectAttributes,
+                               ModelMap mod,
+                               @Validated
+                               @ModelAttribute("order")
+                                       ArticleOrder order,
+                               BindingResult validationResult) {
 
         if (validationResult.hasErrors()) {
 
@@ -97,29 +97,29 @@ public class ArticleOrderController {
             }
             mod.addAttribute("articleList", articleRepository.findAllArticles());
             mod.addAttribute("priorityList", priorities);
-            mod.addAttribute("customersList", customerList );
+            mod.addAttribute("customersList", customerList);
             return "addOrder";
         }
-        order.setAddOrderDate(LocalDate.now());
-        order.setExpectedDate(LocalDate.now().plusDays(30));
+
         order.setOrderCondition(OrderCondition.ADDED);
         List<ArticleInOrder> articlesInOrder = new ArrayList<>();
 
-        for (Article a:order.getArticles())
-        {
+        for (Article a : order.getArticles()) {
             ArticleInOrder articleInOrder = new ArticleInOrder();
             articleInOrder.setArticleOrder(order.getOrderNumber());
             articleInOrder.setArticle(a.getArticleName());
             articleInOrder.setCount(1);
+            articleInOrder.setAddOrderDate(LocalDate.now());
+            articleInOrder.setExpectedDate(LocalDate.now().plusDays(30));
 //            articleInOrder.setDummyForUnique(order.getOrderNumber()+a.getArticleName());
             articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
         }
         order.setArticleInOrder(articlesInOrder);
-        mod.addAttribute("order",orderRepository.save(order));
+        mod.addAttribute("order", orderRepository.save(order));
 
         //mod.addAttribute("order",order.getOrderNumber());
 //        mod.addAttribute("articles",articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber()));
-        mod.addAttribute("articles2",order.getArticleInOrder());
+        mod.addAttribute("articles2", order.getArticleInOrder());
 
         redirectAttributes.addAttribute("orderId", order.getOrderId());
 
@@ -127,11 +127,27 @@ public class ArticleOrderController {
     }
 
     @PostMapping(path = "/order/articlesCount")
-    public String saveCount (@ModelAttribute("order")
-                             ArticleOrder order) {
+    public String saveCount(@ModelAttribute("order")
+                                    ArticleOrder order) {
 //        ArticleOrder order = orderRepository.findArticleOrderByOrderNumber(articles.get(0).getArticleOrder());
 //        order.setArticleInOrder(articles);
-        for (ArticleInOrder a:order.getArticleInOrder()) {
+        for (ArticleInOrder a : order.getArticleInOrder()) {
+            if (a.getExpectedDate()==null) {
+                LocalDate date = LocalDate.now();
+                LocalDate molded = LocalDate.now();
+                for (ArticleInOrder articleInOrder:order.getArticleInOrder()) {
+                    if (articleInOrder.getAddOrderDate()!=null) {
+                        date = articleInOrder.getAddOrderDate();
+                        molded = articleInOrder.getMoldedDate();
+                    }
+                }
+                a.setAddOrderDate(date);
+                a.setExpectedDate(date.plusDays(30));
+                if (order.getOrderCondition() == OrderCondition.MOLDED) {
+                    a.setMoldedDate(molded);
+                    a.setExpectedDateFromMolded(molded.plusDays(40));
+                }
+            }
             articleInOrderRepository.save(a);
         }
 //        articleInOrderRepository.saveAll(order.getArticleInOrder());
@@ -141,10 +157,10 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/order/delete/{orderId}")
     public String deleteArticle(@PathVariable(name = "orderId") long orderId) {
-        ArticleOrder order= orderRepository.findArticleOrderByOrderId(orderId);
+        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
         List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
         orderRepository.delete(order);
-        for (ArticleInOrder a:articleInOrderList) {
+        for (ArticleInOrder a : articleInOrderList) {
             articleInOrderRepository.delete(a);
         }
         return "redirect:/orders";
@@ -152,13 +168,13 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/order/{orderId}")
     public String editOrder(ModelMap modelMap,
-                              @PathVariable(name = "orderId") long orderId) {
-        ArticleOrder order= orderRepository.findArticleOrderByOrderId(orderId);
+                            @PathVariable(name = "orderId") long orderId) {
+        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
         List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
         modelMap.addAttribute("order", order);
         modelMap.addAttribute("articleList", articleRepository.findAllArticles());
         modelMap.addAttribute("priorityList", getPriorityList());
-        modelMap.addAttribute("customersList", getCustomerList() );
+        modelMap.addAttribute("customersList", getCustomerList());
         return "editOrder";
     }
 
@@ -170,8 +186,8 @@ public class ArticleOrderController {
                                         ArticleOrder order) {
 
         List<ArticleInOrder> articlesInOrder = order.getArticleInOrder();
-        for (Article a:order.getArticles()) {
-            if (articleInOrderRepository.findArticleInOrderByArticleAndArticleOrder(a.getArticleName(), order.getOrderNumber()) ==null) {
+        for (Article a : order.getArticles()) {
+            if (articleInOrderRepository.findArticleInOrderByArticleAndArticleOrder(a.getArticleName(), order.getOrderNumber()) == null) {
 
                 ArticleInOrder articleInOrder = new ArticleInOrder();
                 articleInOrder.setArticleOrder(order.getOrderNumber());
@@ -183,9 +199,9 @@ public class ArticleOrderController {
         }
         List<ArticleInOrder> articleInOrderList = order.getArticleInOrder();
         List<ArticleInOrder> articleInOrderToDelete = new ArrayList<>();
-        for (int i = 0;i<articleInOrderList.size();i++) {
-            boolean isInOrder=false;
-            for (Article a:order.getArticles()) {
+        for (int i = 0; i < articleInOrderList.size(); i++) {
+            boolean isInOrder = false;
+            for (Article a : order.getArticles()) {
                 if (a.getArticleName().equals(articleInOrderList.get(i).getArticle())) {
                     isInOrder = true;
                     break;
@@ -193,7 +209,7 @@ public class ArticleOrderController {
             }
             if (!isInOrder) {
 
-                articleInOrderToDelete.add( articleInOrderList.get(i));
+                articleInOrderToDelete.add(articleInOrderList.get(i));
                 articleInOrderList.remove(articleInOrderList.get(i));
                 order.setArticleInOrder(articleInOrderList);
                 i--;
@@ -205,20 +221,46 @@ public class ArticleOrderController {
         /*order.setArticleInOrder(articleInOrderList);*/
         orderRepository.save(order);
         if (!articleInOrderToDelete.isEmpty()) {
-            for (ArticleInOrder articleInOrderInd:articleInOrderToDelete)
-            articleInOrderRepository.delete(articleInOrderInd);
+            for (ArticleInOrder articleInOrderInd : articleInOrderToDelete)
+                articleInOrderRepository.delete(articleInOrderInd);
         }
-        redirectAttributes.addAttribute("orderId",order.getOrderId());
+        redirectAttributes.addAttribute("orderId", order.getOrderId());
         return "redirect:/order/articlesCount";
     }
 
     @GetMapping(path = "/order/articlesCount")
-    public String setCountGet ( ModelMap modelMap,
-            @ModelAttribute("orderId")
-                               long orderId) {
+    public String setCountGet(ModelMap modelMap,
+                              @ModelAttribute("orderId")
+                                      long orderId) {
         ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
-        modelMap.addAttribute("order" ,order);
+        modelMap.addAttribute("order", order);
         return "countArticlesInOrder";
 
+    }
+
+    @GetMapping(path = "/order/changeOrderStatus/{orderId}")
+    public String editOrder(@PathVariable(name = "orderId") long orderId) {
+        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
+        OrderCondition o = order.getOrderCondition();
+        if (o == OrderCondition.MOLDED) {
+            for (ArticleInOrder articleInOrder : order.getArticleInOrder()) {
+                if (articleInOrder.getCount() - articleInOrder.getDoneCount() > 0) {
+                    return "redirect:/order/approve";
+                }
+            }
+        }
+        if (o == OrderCondition.FINISHED) {
+            order.setFinishedDate(LocalDate.now());
+        }
+        if (o == OrderCondition.ADDED) {
+            for (ArticleInOrder a : order.getArticleInOrder()) {
+                a.setMoldedDate(LocalDate.now());
+                a.setExpectedDateFromMolded(a.getMoldedDate().plusDays(40));
+            }
+        }
+        order.setOrderCondition(o.changeConditionToNext(o));
+        orderRepository.save(order);
+
+        return "redirect:/orders";
     }
 }

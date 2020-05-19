@@ -56,41 +56,44 @@
             <tbody>
 <th:block th:each="ordersToView : ${orderList}">
             <tr th:each="articlesToView,stat : ${ordersToView.articleInOrder}">
-                <td th:utext="${ordersToView.orderNumber}">№</td>
-                <td style="vertical-align: top" th:switch="${ordersToView.orderCondition}">
+                <th:block th:if="${stat.first}">
+                <td th:rowspan="${stat.size}" th:utext="${ordersToView.orderNumber}">№</td>
+                <td th:rowspan="${stat.size}" style="vertical-align: top" th:switch="${ordersToView.orderCondition}">
 
                     <a th:href="@{/order/{orderId}(orderId = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                     </a>
-                    <a th:case="${conAdded}" th:href="@{/order/changeCondition/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                    <p></p>
+                    <a th:case="${conAdded}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-circle-arrow-right"></span>
                         </button>
                     </a>
-                    <a th:case="${conCanceled}" th:href="@{/order/changeCondition/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                    <a th:case="${conCanceled}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-repeat"></span>
                         </button>
                     </a>
-                    <a th:case="${conMolded}" th:href="@{/order/changeCondition/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                    <a th:case="${conMolded}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-ok btn-success"></span>
                         </button>
                     </a>
-                    <a th:case="${conProcess}" th:href="@{/order/changeCondition/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                    <a th:case="${conProcess}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                     </a>
 
                 </td>
-                <td th:utext="${ordersToView.getPriority()?.priorityType}">Приоритет</td>
-                <td th:utext="${ordersToView.getAddOrderDate().format(dateFormatter)}">Дата добавления</td>
-                <td th:utext="${ordersToView.getOrderCondition()?.getTitle()}">Состояние</td>
-                <td th:utext="${ordersToView.getCustomer()?.getCustomerName()}">Куда</td>
-                <td th:utext="${ordersToView.getExpectedDate().format(dateFormatter)}">Дата ожидаемая</td>
+                <td th:rowspan="${stat.size}" th:utext="${ordersToView.getPriority()?.priorityType}">Приоритет</td>
+                <td  th:rowspan="${stat.size}" th:utext="${articlesToView.getAddOrderDate().format(dateFormatter)}">Дата добавления</td>
+                <td th:rowspan="${stat.size}" th:utext="${ordersToView.getOrderCondition()?.getTitle()}">Состояние</td>
+                <td th:rowspan="${stat.size}" th:utext="${ordersToView.getCustomer()?.getCustomerName()}">Куда</td>
+                </th:block>
+                <td th:utext="${articlesToView.getExpectedDate()?.format(dateFormatter)}">Дата ожидаемая</td>
                 <td th:utext="${articlesToView.article}">Артикул</td>
                 <td th:utext="${ordersToView.articles[stat.index]?.metalType.metalTypeName + ' ' + ordersToView.articles[stat.index].metalType.hallmark}">Металл</td>
                 <td th:utext="${articlesToView.count} + ' шт.'">Количество, шт</td>
@@ -99,11 +102,11 @@
                 <td th:utext="${articlesToView.doneCount} + ' шт.'">готово, шт</td>
                 <td th:utext="${ordersToView.articles[stat.index]?.getMinerals()}">вставки</td>
                 <td th:utext="${ordersToView.comment}">Комментарий</td>
-                <td th:utext="${ordersToView.getMoldedDate()?.format(dateFormatter)}">Дата ожидаемая</td>
-                <td th:utext="${ordersToView.getExpectedDateFromMolded()?.format(dateFormatter)}">Дата ожидаемая после отливки</td>
-                <td th:utext="${ordersToView.getAddOrderDate()?.until(today,days)}">С даты размещения, дн.</td>
-                <td th:utext="${ordersToView.getMoldedDate()?.until(today,days)}">С даты отливки, дн.</td>
-                <td th:utext="${ordersToView.getExpectedDateFromMolded()} ? ${today.until(ordersToView.getExpectedDateFromMolded(),days)} : 'нет даты отливки'">Просрочка, дн.</td>
+                <td th:utext="${articlesToView.getMoldedDate()?.format(dateFormatter)}">Дата отливки</td>
+                <td th:utext="${articlesToView.getExpectedDateFromMolded()?.format(dateFormatter)}">Дата ожидаемая после отливки</td>
+                <td th:utext="${articlesToView.getAddOrderDate()?.until(today,days)}">С даты размещения, дн.</td>
+                <td th:utext="${articlesToView.getMoldedDate()?.until(today,days)}">С даты отливки, дн.</td>
+                <td th:utext="${articlesToView.getExpectedDateFromMolded()} ? ${today.until(articlesToView.getExpectedDateFromMolded(),days)} : 'нет даты отливки'">Просрочка, дн.</td>
                 <td>
                     <a th:href="@{/order/delete/{id}(id = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
