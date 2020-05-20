@@ -1,5 +1,6 @@
 package org.jewel.db;
 
+import org.jewel.model.Article;
 import org.jewel.model.ArticleInOrder;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -17,6 +18,6 @@ public interface ArticleInOrderRepository extends PagingAndSortingRepository<Art
 
     List<ArticleInOrder> findArticleInOrdersByArticleOrder(String articleOrder);
 
-    ArticleInOrder findArticleInOrderByArticleAndArticleOrder(String article,String articleOrder);
+    ArticleInOrder findArticleInOrderByArticleAndArticleOrder(Article article, String articleOrder);
 
 }

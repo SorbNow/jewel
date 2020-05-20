@@ -7,7 +7,8 @@ import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"articleOrder","article"}))
+@Table
+        //(uniqueConstraints = @UniqueConstraint(columnNames = {"articleOrder","article"}))
 public class ArticleInOrder {
 
     @Id
@@ -18,8 +19,8 @@ public class ArticleInOrder {
     @NotBlank
     private String articleOrder;
 
-    @Column
-    private String article;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Article article;
 
 //    @Column(unique = true)
 //    private String dummyForUnique;
@@ -115,11 +116,11 @@ public class ArticleInOrder {
         this.lastDate = lastDate;
     }
 
-    public String getArticle() {
+    public Article getArticle() {
         return article;
     }
 
-    public void setArticle(String article) {
+    public void setArticle(Article article) {
         this.article = article;
     }
 

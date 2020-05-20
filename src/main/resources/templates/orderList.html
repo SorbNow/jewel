@@ -89,12 +89,12 @@
 
                 </td>
                 <td th:rowspan="${stat.size}" th:utext="${ordersToView.getPriority()?.priorityType}">Приоритет</td>
-                <td  th:rowspan="${stat.size}" th:utext="${articlesToView.getAddOrderDate().format(dateFormatter)}">Дата добавления</td>
+                <td  th:rowspan="${stat.size}" th:utext="${articlesToView.getAddOrderDate()?.format(dateFormatter)}">Дата добавления</td>
                 <td th:rowspan="${stat.size}" th:utext="${ordersToView.getOrderCondition()?.getTitle()}">Состояние</td>
                 <td th:rowspan="${stat.size}" th:utext="${ordersToView.getCustomer()?.getCustomerName()}">Куда</td>
                 </th:block>
                 <td th:utext="${articlesToView.getExpectedDate()?.format(dateFormatter)}">Дата ожидаемая</td>
-                <td th:utext="${articlesToView.article}">Артикул</td>
+                <td th:utext="${articlesToView.article.getArticleName()}">Артикул</td>
                 <td th:utext="${ordersToView.articles[stat.index]?.metalType.metalTypeName + ' ' + ordersToView.articles[stat.index].metalType.hallmark}">Металл</td>
                 <td th:utext="${articlesToView.count} + ' шт.'">Количество, шт</td>
                 <td th:utext="${articlesToView.size}"> Размер</td>
@@ -162,6 +162,7 @@
 <script>
     $(document).ready( function () {
         $('#orderTable').DataTable( {
+            responsive: true,
             "language": {
                 "lengthMenu": " _MENU_ записей на странице",
                 "zeroRecords": "Ничего не найдено",

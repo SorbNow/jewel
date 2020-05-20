@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+
+</head>
+<body>
+<th:block th:include="~{_adminMenu}"/>
+
+<form  th:action="@{/orders}" method="post" enctype="application/x-www-form-urlencoded">
+
+    <a th:href="@{/order/add}">
+
+        <p></p>
+        <button type="button" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+
+    </a>
+    <p> </p>
+    <div>
+        <table id = "orderTable" style="font-size: 12px" class="table table-striped table-bordered">
+            <thead>
+            <tr>
+
+                <th >№ заказа</th>
+                <th >#</th>
+
+                <th >Приор.</th>
+                <th >Дата добавления</th>
+                <th>Состояние</th>
+                <th>Куда</th>
+                <th >Дата ожидаемая</th>
+                <th >Артикул</th>
+                <th >Металл</th>
+                <th >Количество</th>
+                <th >Размер</th>
+                <th >Вес</th>
+                <th >Готово</th>
+                <th >Вставки</th>
+                <th >Комментарий</th>
+                <th >Дата отливки</th>
+                <th >Дата ожидаемая после отливки</th>
+                <th >С даты размещения, дн.</th>
+                <th >С даты отливки, дн.</th>
+                <th >Просрочка, дн.</th>
+                <th > #</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <th:block th:each="ordersToView : ${orderList}">
+                <tr th:each="articlesToView,stat : ${ordersToView.articleInOrder}">
+                    <td  th:utext="${ordersToView.orderNumber}">№</td>
+                    <td  style="vertical-align: top" th:switch="${ordersToView.orderCondition}">
+
+                        <a th:href="@{/order/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </a>
+                        <p></p>
+                        <a th:case="${conAdded}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                            </button>
+                        </a>
+                        <a th:case="${conCanceled}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-repeat"></span>
+                            </button>
+                        </a>
+                        <a th:case="${conMolded}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-ok btn-success"></span>
+                            </button>
+                        </a>
+                        <a th:case="${conProcess}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </a>
+
+                    </td>
+                    <td  th:utext="${ordersToView.getPriority()?.priorityType}">Приоритет</td>
+                    <td   th:utext="${articlesToView.getAddOrderDate()?.format(dateFormatter)}">Дата добавления</td>
+                    <td  th:utext="${ordersToView.getOrderCondition()?.getTitle()}">Состояние</td>
+                    <td  th:utext="${ordersToView.getCustomer()?.getCustomerName()}">Куда</td>
+
+                    <td th:utext="${articlesToView.getExpectedDate()?.format(dateFormatter)}">Дата ожидаемая</td>
+                    <td th:utext="${articlesToView.article.getArticleName()}">Артикул</td>
+                    <td th:utext="${ordersToView.articles[stat.index]?.metalType.metalTypeName + ' ' + ordersToView.articles[stat.index].metalType.hallmark}">Металл</td>
+                    <td th:utext="${articlesToView.count} + ' шт.'">Количество, шт</td>
+                    <td th:utext="${articlesToView.size}"> Размер</td>
+                    <td th:utext="${ordersToView.articles[stat.index]?.averageWeight}">Средний(ожидаемый) вес</td>
+                    <td th:utext="${articlesToView.doneCount} + ' шт.'">готово, шт</td>
+                    <td th:utext="${ordersToView.articles[stat.index]?.getMinerals()}">вставки</td>
+                    <td th:utext="${ordersToView.comment}">Комментарий</td>
+                    <td th:utext="${articlesToView.getMoldedDate()?.format(dateFormatter)}">Дата отливки</td>
+                    <td th:utext="${articlesToView.getExpectedDateFromMolded()?.format(dateFormatter)}">Дата ожидаемая после отливки</td>
+                    <td th:utext="${articlesToView.getAddOrderDate()?.until(today,days)}">С даты размещения, дн.</td>
+                    <td th:utext="${articlesToView.getMoldedDate()?.until(today,days)}">С даты отливки, дн.</td>
+                    <td th:utext="${articlesToView.getExpectedDateFromMolded()} ? ${today.until(articlesToView.getExpectedDateFromMolded(),days)} : 'нет даты отливки'">Просрочка, дн.</td>
+                    <td>
+                        <a th:href="@{/order/delete/{id}(id = ${ordersToView.getOrderId()})}">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!--
+
+        &lt;!&ndash; Button to Open the Modal &ndash;&gt;
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            Open modal
+        </button>
+
+        &lt;!&ndash; The Modal &ndash;&gt;
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    &lt;!&ndash; Modal Header &ndash;&gt;
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal Heading</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    &lt;!&ndash; Modal body &ndash;&gt;
+                    <div class="modal-body">
+                        Modal body..
+                    </div>
+                    &lt;!&ndash; Modal footer &ndash;&gt;
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    -->
+
+
+</form>
+<script
+        src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+<script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    $(document).ready( function () {
+        $('#orderTable').DataTable( {
+            "language": {
+                "lengthMenu": " _MENU_ записей на странице",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Показано _PAGE_ стр. из _PAGES_",
+                "infoEmpty": "Записей не найдено",
+                "infoFiltered": "( Отсортировано среди _MAX_ значений)",
+                "search":         "Поиск:",
+                "paginate": {
+                    "next": "След.",
+                    "previous": "Пред."
+                }
+            },
+            "scrollX": true
+        });
+    } );
+</script>
+</body>
+</html>

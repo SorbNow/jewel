@@ -66,12 +66,27 @@ public class ArticleOrderController {
 
         return "orderList";
     }
+    @GetMapping(path = "/orders2")
+    public String getOrdersList2(ModelMap modelMap) {
+        List<ArticleOrder> orderList = orderRepository.findAllOrders();
+        DateTimeFormatter europeanDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        modelMap.addAttribute("orderList", orderList);
+        modelMap.addAttribute("dateFormatter", europeanDateFormatter);
+        modelMap.addAttribute("today", LocalDate.now());
+        modelMap.addAttribute("days", ChronoUnit.DAYS);
+        modelMap.addAttribute("conAdded", OrderCondition.ADDED);
+        modelMap.addAttribute("conCanceled", OrderCondition.CANCELED);
+        modelMap.addAttribute("conMolded", OrderCondition.MOLDED);
+        modelMap.addAttribute("conProcess", OrderCondition.PROCESSING);
+
+        return "oldOrderList";
+    }
 
     @GetMapping(path = "/order/add")
     public String addOrderGet(ModelMap modelMap) {
         ArticleOrder order = new ArticleOrder();
         modelMap.addAttribute("order", order);
-        modelMap.addAttribute("articleList", articleRepository.findAllArticles());
+        modelMap.addAttribute("articleList", articleRepository.findAllArticlesSorted());
         modelMap.addAttribute("priorityList", getPriorityList());
         modelMap.addAttribute("customersList", getCustomerList());
         return "addOrder";
@@ -95,7 +110,7 @@ public class ArticleOrderController {
             for (Customer customer : customerRepository.findAll()) {
                 customerList.add(customer);
             }
-            mod.addAttribute("articleList", articleRepository.findAllArticles());
+            mod.addAttribute("articleList", articleRepository.findAllArticlesSorted());
             mod.addAttribute("priorityList", priorities);
             mod.addAttribute("customersList", customerList);
             return "addOrder";
@@ -107,10 +122,10 @@ public class ArticleOrderController {
         for (Article a : order.getArticles()) {
             ArticleInOrder articleInOrder = new ArticleInOrder();
             articleInOrder.setArticleOrder(order.getOrderNumber());
-            articleInOrder.setArticle(a.getArticleName());
+            articleInOrder.setArticle(a);
             articleInOrder.setCount(1);
             articleInOrder.setAddOrderDate(LocalDate.now());
-            articleInOrder.setExpectedDate(LocalDate.now().plusDays(30));
+            articleInOrder.setExpectedDate(LocalDate.now().plusDays(a.getProductionTime()));
 //            articleInOrder.setDummyForUnique(order.getOrderNumber()+a.getArticleName());
             articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
         }
@@ -142,10 +157,10 @@ public class ArticleOrderController {
                     }
                 }
                 a.setAddOrderDate(date);
-                a.setExpectedDate(date.plusDays(30));
+                a.setExpectedDate(date.plusDays(a.getArticle().getProductionTime()));
                 if (order.getOrderCondition() == OrderCondition.MOLDED) {
                     a.setMoldedDate(molded);
-                    a.setExpectedDateFromMolded(molded.plusDays(40));
+                    a.setExpectedDateFromMolded(molded.plusDays(a.getArticle().getProductionTimeFromMolded()));
                 }
             }
             articleInOrderRepository.save(a);
@@ -172,7 +187,7 @@ public class ArticleOrderController {
         ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
         List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
         modelMap.addAttribute("order", order);
-        modelMap.addAttribute("articleList", articleRepository.findAllArticles());
+        modelMap.addAttribute("articleList", articleRepository.findAllArticlesSorted());
         modelMap.addAttribute("priorityList", getPriorityList());
         modelMap.addAttribute("customersList", getCustomerList());
         return "editOrder";
@@ -187,11 +202,11 @@ public class ArticleOrderController {
 
         List<ArticleInOrder> articlesInOrder = order.getArticleInOrder();
         for (Article a : order.getArticles()) {
-            if (articleInOrderRepository.findArticleInOrderByArticleAndArticleOrder(a.getArticleName(), order.getOrderNumber()) == null) {
+            if (articleInOrderRepository.findArticleInOrderByArticleAndArticleOrder(a, order.getOrderNumber()) == null) {
 
                 ArticleInOrder articleInOrder = new ArticleInOrder();
                 articleInOrder.setArticleOrder(order.getOrderNumber());
-                articleInOrder.setArticle(a.getArticleName());
+                articleInOrder.setArticle(a);
                 articleInOrder.setCount(1);
                 articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
                 orderRepository.save(order);
@@ -202,7 +217,9 @@ public class ArticleOrderController {
         for (int i = 0; i < articleInOrderList.size(); i++) {
             boolean isInOrder = false;
             for (Article a : order.getArticles()) {
-                if (a.getArticleName().equals(articleInOrderList.get(i).getArticle())) {
+                if (a.getArticleName().equals(articleInOrderList.get(i).getArticle().getArticleName()) &&
+                        a.getMetalType().getHallmark()==articleInOrderList.get(i).getArticle().getMetalType().getHallmark() &&
+                        a.getMetalType().getMetalTypeName().equals(articleInOrderList.get(i).getArticle().getMetalType().getMetalTypeName())) {
                     isInOrder = true;
                     break;
                 }
@@ -255,7 +272,7 @@ public class ArticleOrderController {
         if (o == OrderCondition.ADDED) {
             for (ArticleInOrder a : order.getArticleInOrder()) {
                 a.setMoldedDate(LocalDate.now());
-                a.setExpectedDateFromMolded(a.getMoldedDate().plusDays(40));
+                a.setExpectedDateFromMolded(a.getMoldedDate().plusDays(a.getArticle().getProductionTimeFromMolded()));
             }
         }
         order.setOrderCondition(o.changeConditionToNext(o));

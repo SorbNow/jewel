@@ -24,6 +24,8 @@ public interface ArticleRepository extends PagingAndSortingRepository<Article, L
 
     @Query("SELECT a from Article a")
     List<Article> findAllArticles();
+    @Query("SELECT a from Article a ORDER BY a.articleId")
+    List<Article> findAllArticlesSorted();
 
     Article findArticleByArticleNameAndMetalType(String article, MetalType metalType);
     Article findArticleByArticleId(long articleId);

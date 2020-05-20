@@ -42,7 +42,7 @@ public class ArticleController {
 
     @GetMapping(path = "/articles")
     public String articlesList(ModelMap modelMap) {
-        List<Article> articles = articleRepository.findAllArticles();
+        List<Article> articles = articleRepository.findAllArticlesSorted();
         modelMap.addAttribute("allArticlesList",articles);
         return "articleList";
     }
