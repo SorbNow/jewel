@@ -203,11 +203,4 @@ public class ArticleOrder {
         this.articleInOrder = articleInOrder;
     }
 
-    public int getMaxProductionTimeFromMolded() {
-        int max = 0;
-        for (Article a : articles) {
-            if (a.getProductionTimeFromMolded()>max){max=a.getProductionTimeFromMolded();}
-        }
-        return max;
-    }
 }

@@ -15,6 +15,6 @@ public class MainPageController {
         } else {
             return "redirect:/login-page";
         }
-        return "index";
+        return "redirect:/home";
     }
 }

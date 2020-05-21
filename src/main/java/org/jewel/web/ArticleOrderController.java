@@ -15,6 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Controller
 @SessionAttributes("order")
@@ -34,6 +36,21 @@ public class ArticleOrderController {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @ModelAttribute("approveForms")
+    public ApproveCountList createForms() {
+        ApproveCountList approveCountForms = new ApproveCountList();
+        return approveCountForms;
+    }
+   /* @ModelAttribute("approveForm")
+    public ApproveCountForm createForm() {
+
+        ApproveCountForm form= new ApproveCountForm();
+        form.setArticleName("");
+        form.setDate(LocalDate.now());
+        form.setCount(0);
+        return form;
+    }*/
 
     private List<Priority> getPriorityList() {
         List<Priority> priorities = new ArrayList<>();
@@ -66,6 +83,7 @@ public class ArticleOrderController {
 
         return "orderList";
     }
+
     @GetMapping(path = "/orders2")
     public String getOrdersList2(ModelMap modelMap) {
         List<ArticleOrder> orderList = orderRepository.findAllOrders();
@@ -80,6 +98,22 @@ public class ArticleOrderController {
         modelMap.addAttribute("conProcess", OrderCondition.PROCESSING);
 
         return "oldOrderList";
+    }
+
+    @GetMapping(path = "/orders3")
+    public String getOrdersList3(ModelMap modelMap) {
+        List<ArticleOrder> orderList = orderRepository.findAllOrders();
+        DateTimeFormatter europeanDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        modelMap.addAttribute("orderList", orderList);
+        modelMap.addAttribute("dateFormatter", europeanDateFormatter);
+        modelMap.addAttribute("today", LocalDate.now());
+        modelMap.addAttribute("days", ChronoUnit.DAYS);
+        modelMap.addAttribute("conAdded", OrderCondition.ADDED);
+        modelMap.addAttribute("conCanceled", OrderCondition.CANCELED);
+        modelMap.addAttribute("conMolded", OrderCondition.MOLDED);
+        modelMap.addAttribute("conProcess", OrderCondition.PROCESSING);
+
+        return "orderModal";
     }
 
     @GetMapping(path = "/order/add")
@@ -147,11 +181,11 @@ public class ArticleOrderController {
 //        ArticleOrder order = orderRepository.findArticleOrderByOrderNumber(articles.get(0).getArticleOrder());
 //        order.setArticleInOrder(articles);
         for (ArticleInOrder a : order.getArticleInOrder()) {
-            if (a.getExpectedDate()==null) {
+            if (a.getExpectedDate() == null) {
                 LocalDate date = LocalDate.now();
                 LocalDate molded = LocalDate.now();
-                for (ArticleInOrder articleInOrder:order.getArticleInOrder()) {
-                    if (articleInOrder.getAddOrderDate()!=null) {
+                for (ArticleInOrder articleInOrder : order.getArticleInOrder()) {
+                    if (articleInOrder.getAddOrderDate() != null) {
                         date = articleInOrder.getAddOrderDate();
                         molded = articleInOrder.getMoldedDate();
                     }
@@ -218,7 +252,7 @@ public class ArticleOrderController {
             boolean isInOrder = false;
             for (Article a : order.getArticles()) {
                 if (a.getArticleName().equals(articleInOrderList.get(i).getArticle().getArticleName()) &&
-                        a.getMetalType().getHallmark()==articleInOrderList.get(i).getArticle().getMetalType().getHallmark() &&
+                        a.getMetalType().getHallmark() == articleInOrderList.get(i).getArticle().getMetalType().getHallmark() &&
                         a.getMetalType().getMetalTypeName().equals(articleInOrderList.get(i).getArticle().getMetalType().getMetalTypeName())) {
                     isInOrder = true;
                     break;
@@ -256,12 +290,14 @@ public class ArticleOrderController {
     }
 
     @GetMapping(path = "/order/changeOrderStatus/{orderId}")
-    public String editOrder(@PathVariable(name = "orderId") long orderId) {
+    public String editOrder(@PathVariable(name = "orderId") long orderId,
+                            RedirectAttributes redirectAttributes) {
         ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
         OrderCondition o = order.getOrderCondition();
         if (o == OrderCondition.MOLDED) {
             for (ArticleInOrder articleInOrder : order.getArticleInOrder()) {
                 if (articleInOrder.getCount() - articleInOrder.getDoneCount() > 0) {
+                    redirectAttributes.addAttribute("orderName", order);
                     return "redirect:/order/approve";
                 }
             }
@@ -278,6 +314,55 @@ public class ArticleOrderController {
         order.setOrderCondition(o.changeConditionToNext(o));
         orderRepository.save(order);
 
+        return "redirect:/orders";
+    }
+
+    @GetMapping(path = "/order/approve")
+    public String approveArticlesGet(ModelMap modelMap,
+                                     @ModelAttribute("orderName") ArticleOrder order
+    ) {
+
+        ApproveCountList approveCountList = new ApproveCountList();
+        List<ApproveCountForm> approveCountFormList = new ArrayList<>();
+        for (ArticleInOrder a : order.getArticleInOrder()) {
+            Map<LocalDate, Integer> dateAndCount = a.getDateAndCountDone();
+            if (a.getDateAndCountDone() == null || a.getDateAndCountDone().isEmpty()) {
+                dateAndCount = new TreeMap<>();
+                dateAndCount.put(LocalDate.now(), 0);
+                a.setDateAndCountDone(dateAndCount);
+            }
+            ApproveCountForm form = new ApproveCountForm();
+            form.setArticleName(a.getArticle().getArticleName());
+            form.setCount(1);
+            form.setDate(LocalDate.now());
+            approveCountFormList.add(form);
+        }
+        approveCountList.setApproveCountFormList(approveCountFormList);
+        modelMap.addAttribute("order", order);
+        modelMap.addAttribute("format", DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        modelMap.addAttribute("forms", approveCountList);
+        return "approveToOrder";
+    }
+
+    @PostMapping(path = "/order/approve")
+    public String approveArticlesPost(ModelMap modelMap,
+                                      @ModelAttribute("order")
+                                              ArticleOrder order,
+                                      @ModelAttribute("forms")
+                                              ApproveCountList approveCountForms,
+                                      BindingResult validationResult) {
+        for (ArticleInOrder a : order.getArticleInOrder()) {
+            Map<LocalDate, Integer> dateAndCount = a.getDateAndCountDone();
+            if (dateAndCount.get(LocalDate.now()) == 0) {
+                dateAndCount.remove(LocalDate.now());
+            }
+            for (ApproveCountForm approveForm : approveCountForms.getApproveCountFormList()) {
+                if (approveForm.getArticleName().equals(a.getArticle().getArticleName())) {
+
+                }
+            }
+        }
+        orderRepository.save(order);
         return "redirect:/orders";
     }
 }

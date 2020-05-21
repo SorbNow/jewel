@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование вставки</title>
+    <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/listPages.css}"/>
+    <link rel="stylesheet" th:href="@{/custom.css}"/>
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<th:block th:include="~{_adminMenu}"/>
+
+<form th:action="@{/order/approve}" method="post"
+      enctype="application/x-www-form-urlencoded">
+
+
+    <div>
+        <table id="orderTable" style="font-size: 12px; text-align: center" class="table">
+            <thead>
+            <tr>
+
+                <th style="text-align: center" rowspan="2">Артикул</th>
+                <th rowspan="2">Металл</th>
+                <th rowspan="2">Количество</th>
+                <th rowspan="2">Размер</th>
+                <th rowspan="2">Готово, шт.</th>
+                <th colspan="2">Поступление изделий</th>
+            </tr>
+            <tr>
+                <th>Дата</th>
+                <th>Количество</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <th:block th:each="articleInOrder : ${order.getArticleInOrder()}">
+            <tr th:each="income,stat : ${articleInOrder.getDateAndCountDone()?.entrySet()}" th:with="rowCount =${stat.size==0?stat.size+1:stat.size}">
+
+                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.article.getArticleName()}" th:name = "article">Артикул</td>
+                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.article?.metalType.metalTypeName + ' ' +
+                    articleInOrder.article?.metalType.hallmark}">Металл</td>
+                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.count} + ' шт.'">Количество, шт</td>
+                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.size}"> Размер</td>
+                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.doneCount} + ' шт.'">готово, шт</td>
+
+
+                    <td th:utext="${income.value!=0?income.key?.format(format):'нет поступлений'}"> Дата</td>
+                    <td th:utext="${income.value==0?'нет поступлений':income.value}">Кол-во</td>
+            </tr>
+                <th:block th:each="form,stat:${forms.approveCountFormList}" th:if="${form.articleName.equals(articleInOrder.article.articleName)}">
+                    <tr>
+                        <input type="hidden" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].articleName}">
+                        <td>
+                            <input type="date" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].date}">
+
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].count}" 
+                                   th:max="${articleInOrder.count}-${articleInOrder.doneCount}">
+                        </td>
+                    </tr>
+                </th:block>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <p>
+    <input type="submit">
+    </p>
+</form>
+</body>
+</html>

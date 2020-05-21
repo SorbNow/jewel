@@ -35,7 +35,7 @@ public class ArticleInOrder {
     @Column
     private int size;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "article_in_order_done",
     joinColumns = {@JoinColumn(name = "article_in_order_done_id") })
     @MapKeyColumn(name = "done_date")
