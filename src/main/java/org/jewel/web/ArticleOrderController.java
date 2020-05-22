@@ -333,8 +333,9 @@ public class ArticleOrderController {
             }
             ApproveCountForm form = new ApproveCountForm();
             form.setArticleName(a.getArticle().getArticleName());
-            form.setCount(1);
+            form.setCount(0);
             form.setDate(LocalDate.now());
+            form.setMetalType(a.getArticle().getMetalType());
             approveCountFormList.add(form);
         }
         approveCountList.setApproveCountFormList(approveCountFormList);
@@ -351,16 +352,35 @@ public class ArticleOrderController {
                                       @ModelAttribute("forms")
                                               ApproveCountList approveCountForms,
                                       BindingResult validationResult) {
+        boolean isDone = true;
         for (ArticleInOrder a : order.getArticleInOrder()) {
             Map<LocalDate, Integer> dateAndCount = a.getDateAndCountDone();
             if (dateAndCount.get(LocalDate.now()) == 0) {
                 dateAndCount.remove(LocalDate.now());
             }
             for (ApproveCountForm approveForm : approveCountForms.getApproveCountFormList()) {
-                if (approveForm.getArticleName().equals(a.getArticle().getArticleName())) {
+                if (approveForm.getArticleName().equals(a.getArticle().getArticleName()) &&
+                        approveForm.getMetalType().getHallmark() == a.getArticle().getMetalType().getHallmark() &&
+                        approveForm.getMetalType().getMetalTypeName().equals(a.getArticle().getMetalType().getMetalTypeName())) {
+                    if (dateAndCount.get(approveForm.getDate()) == null || dateAndCount.isEmpty() ||
+                            dateAndCount.get(approveForm.getDate()) == 0
+                    ) {
+                        if (approveForm.getCount() != 0) {
+                            dateAndCount.put(approveForm.getDate(), approveForm.getCount());
+                        }
+                    } else {
+                        dateAndCount.put(approveForm.getDate(), dateAndCount.get(approveForm.getDate()) + approveForm.getCount());
+                    }
+                    a.setDoneCount(a.getDoneCount() + approveForm.getCount());
+                    a.setLastDate(LocalDate.now());
 
                 }
             }
+            isDone = a.getCount() == a.getDoneCount();
+            articleInOrderRepository.save(a);
+        }
+        if (isDone) {
+            order.setOrderCondition(order.getOrderCondition().changeConditionToNext(order.getOrderCondition()));
         }
         orderRepository.save(order);
         return "redirect:/orders";

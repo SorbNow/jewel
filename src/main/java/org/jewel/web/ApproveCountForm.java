@@ -1,5 +1,6 @@
 package org.jewel.web;
 
+import org.jewel.model.MetalType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ public class ApproveCountForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private int count;
+    private MetalType metalType;
 
     public String getArticleName() {
         return articleName;
@@ -35,6 +37,14 @@ public class ApproveCountForm {
     }
 
     public ApproveCountForm() {
+    }
+
+    public MetalType getMetalType() {
+        return metalType;
+    }
+
+    public void setMetalType(MetalType metalType) {
+        this.metalType = metalType;
     }
 
     public ApproveCountForm(String articleName, LocalDate date, int count) {

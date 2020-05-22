@@ -52,15 +52,17 @@
                     <td th:utext="${income.value!=0?income.key?.format(format):'нет поступлений'}"> Дата</td>
                     <td th:utext="${income.value==0?'нет поступлений':income.value}">Кол-во</td>
             </tr>
-                <th:block th:each="form,stat:${forms.approveCountFormList}" th:if="${form.articleName.equals(articleInOrder.article.articleName)}">
+                <th:block th:each="form,stat:${forms.approveCountFormList}" th:if="${form.articleName.equals(articleInOrder.article.articleName) &&
+                articleInOrder.article.metalType == form.metalType}">
                     <tr>
                         <input type="hidden" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].articleName}">
+                        <input type="hidden" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].metalType}">
                         <td>
-                            <input type="date" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].date}">
+                            <input type="date" th:readonly="${articleInOrder.count<articleInOrder.doneCount}" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].date}">
 
                         </td>
                         <td>
-                            <input type="number" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].count}" 
+                            <input type="number" th:readonly="${articleInOrder.count<articleInOrder.doneCount}" class="form-control" th:field="${forms.approveCountFormList[__${stat.index}__].count}"
                                    th:max="${articleInOrder.count}-${articleInOrder.doneCount}">
                         </td>
                     </tr>
