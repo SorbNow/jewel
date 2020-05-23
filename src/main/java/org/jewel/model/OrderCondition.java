@@ -35,4 +35,21 @@ public enum OrderCondition {
         }
         return condition;
     }
+    public OrderCondition changeConditionToPrevious(OrderCondition condition) {
+        switch (condition) {
+            case FINISHED: {
+                condition = MOLDED;
+                break;
+            }
+            case MOLDED: {
+                condition = ADDED;
+                break;
+            }
+            default: {
+                condition = PROCESSING;
+                break;
+            }
+        }
+        return condition;
+    }
 }

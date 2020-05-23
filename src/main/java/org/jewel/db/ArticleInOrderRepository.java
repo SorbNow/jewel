@@ -20,4 +20,6 @@ public interface ArticleInOrderRepository extends PagingAndSortingRepository<Art
 
     ArticleInOrder findArticleInOrderByArticleAndArticleOrder(Article article, String articleOrder);
 
+    ArticleInOrder findArticleInOrderByArticleInOrderId(long id);
+
 }

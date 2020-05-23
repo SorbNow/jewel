@@ -66,6 +66,19 @@
                         </button>
                     </a>
                     <p></p>
+                    <a th:href="@{/order/rollback/clear/{orderId}(orderId = ${ordersToView.getOrderId()})}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-backward"></span>
+                        </button>
+                    </a>
+                    <p></p>
+
+                    <a th:href="@{/order/rollback/{type}/{orderId}(orderId = ${ordersToView.getOrderId()},type ='save')}">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-apple"></span>
+                        </button>
+                    </a>
+                    <p></p>
                     <a th:case="${conAdded}" th:href="@{/order/changeOrderStatus/{orderId}(orderId = ${ordersToView.getOrderId()})}">
                         <button type="button" class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-circle-arrow-right"></span>

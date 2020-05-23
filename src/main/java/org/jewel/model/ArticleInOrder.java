@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -35,12 +36,15 @@ public class ArticleInOrder {
     @Column
     private int size;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+/*    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "article_in_order_done",
     joinColumns = {@JoinColumn(name = "article_in_order_done_id") })
     @MapKeyColumn(name = "done_date")
     @Column(name="done_count")
-    private Map<LocalDate, Integer> dateAndCountDone;
+    private Map<LocalDate, Integer> dateAndCountDone;*/
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ArticleDoneDateAndCount> doneDateAndCount;
 
     @Column
     private LocalDate lastDate;
@@ -100,6 +104,7 @@ public class ArticleInOrder {
         this.size = size;
     }
 
+/*
     public Map<LocalDate, Integer> getDateAndCountDone() {
         return dateAndCountDone;
     }
@@ -107,6 +112,7 @@ public class ArticleInOrder {
     public void setDateAndCountDone(Map<LocalDate, Integer> dateAndCountDone) {
         this.dateAndCountDone = dateAndCountDone;
     }
+*/
 
     public LocalDate getLastDate() {
         return lastDate;
@@ -163,5 +169,13 @@ public class ArticleInOrder {
 
     public void setExpectedDateFromMolded(LocalDate expectedDateFromMolded) {
         this.expectedDateFromMolded = expectedDateFromMolded;
+    }
+
+    public List<ArticleDoneDateAndCount> getDoneDateAndCount() {
+        return doneDateAndCount;
+    }
+
+    public void setDoneDateAndCount(List<ArticleDoneDateAndCount> doneDateAndCount) {
+        this.doneDateAndCount = doneDateAndCount;
     }
 }

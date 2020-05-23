@@ -37,6 +37,9 @@ public class ArticleOrderController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private ArticleDoneDateAndCountRepository doneRepository;
+
     @ModelAttribute("approveForms")
     public ApproveCountList createForms() {
         ApproveCountList approveCountForms = new ApproveCountList();
@@ -325,12 +328,15 @@ public class ArticleOrderController {
         ApproveCountList approveCountList = new ApproveCountList();
         List<ApproveCountForm> approveCountFormList = new ArrayList<>();
         for (ArticleInOrder a : order.getArticleInOrder()) {
-            Map<LocalDate, Integer> dateAndCount = a.getDateAndCountDone();
-            if (a.getDateAndCountDone() == null || a.getDateAndCountDone().isEmpty()) {
-                dateAndCount = new TreeMap<>();
-                dateAndCount.put(LocalDate.now(), 0);
-                a.setDateAndCountDone(dateAndCount);
-            }
+            ArticleInOrder articleInOrder = articleInOrderRepository.findArticleInOrderByArticleInOrderId(a.getArticleInOrderId());
+            List<ArticleDoneDateAndCount> dateAndCount = a.getDoneDateAndCount();
+           /* if (a.getDoneDateAndCount() == null || a.getDoneDateAndCount().isEmpty()) {
+                ArticleDoneDateAndCount articleDoneDateAndCount = new ArticleDoneDateAndCount();
+                articleDoneDateAndCount.setDoneDate(LocalDate.now());
+                articleDoneDateAndCount.setCount(0);
+                dateAndCount.add(articleDoneDateAndCount);
+                a.setDoneDateAndCount(dateAndCount);
+            }*/
             ApproveCountForm form = new ApproveCountForm();
             form.setArticleName(a.getArticle().getArticleName());
             form.setCount(0);
@@ -354,35 +360,72 @@ public class ArticleOrderController {
                                       BindingResult validationResult) {
         boolean isDone = true;
         for (ArticleInOrder a : order.getArticleInOrder()) {
-            Map<LocalDate, Integer> dateAndCount = a.getDateAndCountDone();
-            if (dateAndCount.get(LocalDate.now()) == 0) {
-                dateAndCount.remove(LocalDate.now());
-            }
+
             for (ApproveCountForm approveForm : approveCountForms.getApproveCountFormList()) {
                 if (approveForm.getArticleName().equals(a.getArticle().getArticleName()) &&
                         approveForm.getMetalType().getHallmark() == a.getArticle().getMetalType().getHallmark() &&
                         approveForm.getMetalType().getMetalTypeName().equals(a.getArticle().getMetalType().getMetalTypeName())) {
-                    if (dateAndCount.get(approveForm.getDate()) == null || dateAndCount.isEmpty() ||
-                            dateAndCount.get(approveForm.getDate()) == 0
-                    ) {
-                        if (approveForm.getCount() != 0) {
-                            dateAndCount.put(approveForm.getDate(), approveForm.getCount());
-                        }
-                    } else {
-                        dateAndCount.put(approveForm.getDate(), dateAndCount.get(approveForm.getDate()) + approveForm.getCount());
-                    }
-                    a.setDoneCount(a.getDoneCount() + approveForm.getCount());
-                    a.setLastDate(LocalDate.now());
+                    List<ArticleDoneDateAndCount> dateAndCount = a.getDoneDateAndCount();
+                    boolean isFound = false;
+                    for (ArticleDoneDateAndCount articleDoneDateAndCount:a.getDoneDateAndCount()) {
 
+                        if (articleDoneDateAndCount.getDoneDate().isEqual(approveForm.getDate()) && approveForm.getCount()!=0) {
+
+                            articleDoneDateAndCount.setCount(articleDoneDateAndCount.getCount()+approveForm.getCount());
+                            doneRepository.save(articleDoneDateAndCount);
+                            isFound=true;
+
+                        }
+
+                    }
+                    if(!isFound && approveForm.getCount()!=0) {
+
+                        ArticleDoneDateAndCount doneDateAndCount = new ArticleDoneDateAndCount();
+                        doneDateAndCount.setDoneDate(approveForm.getDate());
+                        doneDateAndCount.setCount(approveForm.getCount());
+
+                        dateAndCount.add(doneDateAndCount);
+                        doneRepository.save(doneDateAndCount);
+                        a.setDoneDateAndCount(dateAndCount);
+                        articleInOrderRepository.save(a);
+
+                    } else {break;}
+                    a.setDoneCount(a.getDoneCount() + approveForm.getCount());
+                    if (a.getLastDate()!=null && approveForm.getDate().isAfter(a.getLastDate())) {
+                        a.setLastDate(approveForm.getDate());
+                    }
                 }
             }
+
             isDone = a.getCount() == a.getDoneCount();
             articleInOrderRepository.save(a);
         }
         if (isDone) {
             order.setOrderCondition(order.getOrderCondition().changeConditionToNext(order.getOrderCondition()));
+            orderRepository.save(order);
         }
         orderRepository.save(order);
+        return "redirect:/orders";
+    }
+
+    @GetMapping(path = "order/rollback/{type}/{orderId}")
+    public String rollbackWithoutSave(@PathVariable(name = "type") String type, @PathVariable(name = "orderId") long orderId) {
+        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
+        if (type.equals("save") || type.equals("clear")) {
+            if (type.equals("clear")) {
+                for (ArticleInOrder a : order.getArticleInOrder()) {
+                    for (ArticleDoneDateAndCount articleDoneDateAndCount:a.getDoneDateAndCount()) {
+                        doneRepository.delete(articleDoneDateAndCount);
+                    }
+                    a.getDoneDateAndCount().clear();
+                    a.setDoneCount(0);
+                    a.setLastDate(null);
+
+                }
+            }
+            order.setOrderCondition(order.getOrderCondition().changeConditionToPrevious(order.getOrderCondition()));
+            orderRepository.save(order);
+        }
         return "redirect:/orders";
     }
 }

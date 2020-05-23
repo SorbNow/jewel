@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/login-page").not().authenticated()
                 .antMatchers("/login**", "/style.css").permitAll()
                 .antMatchers("/admin","/admin/**").hasRole("АДМИНИСТРАТОР")
-                .antMatchers("/", "/order/**","/user/**", "/all/**","/**", "/static/images/**","/css/**","/js/**").authenticated()
+                .antMatchers("/", "/order/**","/user/**", "/all/**","/**", "/static/images/**", "/static/css/**","/js/**").authenticated()
                 .anyRequest().denyAll();
 
         http.formLogin()

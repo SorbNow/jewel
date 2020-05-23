@@ -38,20 +38,33 @@
 
             </thead>
             <tbody>
-            <th:block th:each="articleInOrder : ${order.getArticleInOrder()}">
-            <tr th:each="income,stat : ${articleInOrder.getDateAndCountDone()?.entrySet()}" th:with="rowCount =${stat.size==0?stat.size+1:stat.size}">
+            <div th:remove="tag" th:each="articleInOrder : ${order.getArticleInOrder()}"
+                 th:with="rowCount =${articleInOrder.doneDateAndCount==null || articleInOrder.doneDateAndCount.size()==0?
+                 2:articleInOrder.doneDateAndCount.size()+1}">
+            <tr>
 
-                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.article.getArticleName()}" th:name = "article">Артикул</td>
-                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.article?.metalType.metalTypeName + ' ' +
+                <input type="hidden" class="form-control" th:value="${articleInOrder.articleInOrderId}" >
+                    <td th:rowspan="${rowCount}" th:utext="${articleInOrder.article.getArticleName()}" th:name = "article">Артикул</td>
+<!--                    <td th:rowspan="${stat.size+1}" th:utext="${order.orderNumber}" th:name = "article">Артикул</td>-->
+                    <td th:rowspan="${rowCount}" th:utext="${articleInOrder.article?.metalType.metalTypeName + ' ' +
                     articleInOrder.article?.metalType.hallmark}">Металл</td>
-                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.count} + ' шт.'">Количество, шт</td>
-                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.size}"> Размер</td>
-                    <td th:rowspan="${stat.size+1}" th:utext="${articleInOrder.doneCount} + ' шт.'">готово, шт</td>
+                    <td th:rowspan="${rowCount}" th:utext="${articleInOrder.count} + ' шт.'">Количество, шт</td>
+                    <td th:rowspan="${rowCount}" th:utext="${articleInOrder.size}"> Размер</td>
+                    <td th:rowspan="${rowCount}" th:utext="${articleInOrder.doneCount} + ' шт.'">готово, шт</td>
 
 
-                    <td th:utext="${income.value!=0?income.key?.format(format):'нет поступлений'}"> Дата</td>
-                    <td th:utext="${income.value==0?'нет поступлений':income.value}">Кол-во</td>
+                    <td th:utext="${articleInOrder.doneDateAndCount.size()>0 && articleInOrder.doneDateAndCount[0].count!=null
+                    ?articleInOrder.doneDateAndCount[0].doneDate?.format(format):'нет поступлений'}"> Дата</td>
+                    <td th:utext="${articleInOrder.doneDateAndCount.size()>0 && articleInOrder.doneDateAndCount[0].count!=null
+                    ?articleInOrder.doneDateAndCount[0].count:'нет поступлений'}">Кол-во</td>
+
             </tr>
+                <tr th:each="income,stat : ${articleInOrder.getDoneDateAndCount()}" th:if="${!stat.first}">
+                    <td th:utext="${income.doneDate?.format(format)}"></td>
+                    <td th:utext="${income.count}"></td>
+
+
+                </tr>
                 <th:block th:each="form,stat:${forms.approveCountFormList}" th:if="${form.articleName.equals(articleInOrder.article.articleName) &&
                 articleInOrder.article.metalType == form.metalType}">
                     <tr>
@@ -67,7 +80,7 @@
                         </td>
                     </tr>
                 </th:block>
-            </th:block>
+            </div>
             </tbody>
         </table>
     </div>
