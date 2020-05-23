@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<th:block th:include="~{_adminMenu}"/>
+<th:block th:include="~{menu}"/>
 
 <form th:action="@{/articles}" method="post" enctype="application/x-www-form-urlencoded">
 
@@ -60,11 +60,11 @@
                 <td th:utext="${articleToView.getArticleName()}">Артикул</td>
                 <td th:utext="${articleToView.getMetalType()?.getMetalTypeName()}">Металл</td>
                 <td th:utext="${articleToView.getMetalType()?.getHallmark()}">Проба</td>
-                <td th:utext="${articleToView.getAverageWeight()}">Средний вес</td>
-                <td th:utext="${articleToView.getCost()}">Цена</td>
-                <td th:utext="${articleToView.getProductionTime()}">Срок изготовления</td>
-                <td th:utext="${articleToView.getCollectionType()}">Коллекция</td>
-                <td th:utext="${articleToView.getMinerals()}">Вставки</td>
+                <td th:utext="${articleToView?.getAverageWeight()}">Средний вес</td>
+                <td th:utext="${articleToView?.getCost()}">Цена</td>
+                <td th:utext="${articleToView?.getProductionTime()}">Срок изготовления</td>
+                <td th:utext="${articleToView?.getCollectionType()}">Коллекция</td>
+                <td th:utext="${articleToView?.getMinerals()}">Вставки</td>
 
                 <td>
                     <a th:href="@{/article/delete/{articleId}(articleId = ${articleToView.getArticleId()})}">
