@@ -35,7 +35,7 @@ public class LoginController {
 
     public LoginFormData createData() {
         LoginFormData loginForm = new LoginFormData();
-        loginForm.setUsers(users.findActiveUsers(UserStatus.ACTIVE,UserStatus.REGISTERED));
+        loginForm.setUsers(users.findActiveUsers(UserStatus.ACTIVE, UserStatus.REGISTERED));
         return loginForm;
     }
 
@@ -55,7 +55,7 @@ public class LoginController {
         return "loginPage";
     }
 
-   // @PostMapping(path = "/login-page")
+    // @PostMapping(path = "/login-page")
     public String processLogin(ModelMap model,
                                @Validated
                                @ModelAttribute("loginForm")

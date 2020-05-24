@@ -15,8 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Controller
 @SessionAttributes("order")
@@ -367,18 +365,18 @@ public class ArticleOrderController {
                         approveForm.getMetalType().getMetalTypeName().equals(a.getArticle().getMetalType().getMetalTypeName())) {
                     List<ArticleDoneDateAndCount> dateAndCount = a.getDoneDateAndCount();
                     boolean isFound = false;
-                    for (ArticleDoneDateAndCount articleDoneDateAndCount:a.getDoneDateAndCount()) {
+                    for (ArticleDoneDateAndCount articleDoneDateAndCount : a.getDoneDateAndCount()) {
 
-                        if (articleDoneDateAndCount.getDoneDate().isEqual(approveForm.getDate()) && approveForm.getCount()!=0) {
+                        if (articleDoneDateAndCount.getDoneDate().isEqual(approveForm.getDate()) && approveForm.getCount() != 0) {
 
-                            articleDoneDateAndCount.setCount(articleDoneDateAndCount.getCount()+approveForm.getCount());
+                            articleDoneDateAndCount.setCount(articleDoneDateAndCount.getCount() + approveForm.getCount());
                             doneRepository.save(articleDoneDateAndCount);
-                            isFound=true;
+                            isFound = true;
 
                         }
 
                     }
-                    if(!isFound && approveForm.getCount()!=0) {
+                    if (!isFound && approveForm.getCount() != 0) {
 
                         ArticleDoneDateAndCount doneDateAndCount = new ArticleDoneDateAndCount();
                         doneDateAndCount.setDoneDate(approveForm.getDate());
@@ -389,9 +387,11 @@ public class ArticleOrderController {
                         a.setDoneDateAndCount(dateAndCount);
                         articleInOrderRepository.save(a);
 
-                    } else {break;}
+                    } else {
+                        break;
+                    }
                     a.setDoneCount(a.getDoneCount() + approveForm.getCount());
-                    if (a.getLastDate()!=null && approveForm.getDate().isAfter(a.getLastDate())) {
+                    if (a.getLastDate() != null && approveForm.getDate().isAfter(a.getLastDate())) {
                         a.setLastDate(approveForm.getDate());
                     }
                 }
@@ -414,7 +414,7 @@ public class ArticleOrderController {
         if (type.equals("save") || type.equals("clear")) {
             if (type.equals("clear")) {
                 for (ArticleInOrder a : order.getArticleInOrder()) {
-                    for (ArticleDoneDateAndCount articleDoneDateAndCount:a.getDoneDateAndCount()) {
+                    for (ArticleDoneDateAndCount articleDoneDateAndCount : a.getDoneDateAndCount()) {
                         doneRepository.delete(articleDoneDateAndCount);
                     }
                     a.getDoneDateAndCount().clear();

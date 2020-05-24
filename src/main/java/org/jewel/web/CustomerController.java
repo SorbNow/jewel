@@ -53,7 +53,7 @@ public class CustomerController {
                                ModelMap modelMap,
                                @Validated
                                @ModelAttribute("customer")
-                               Customer customer,
+                                       Customer customer,
                                BindingResult validationResult) {
         customer = trimParameters(customer);
         if (validationResult.hasErrors()) {

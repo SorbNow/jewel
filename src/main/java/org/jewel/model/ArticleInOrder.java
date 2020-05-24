@@ -5,11 +5,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table
-        //(uniqueConstraints = @UniqueConstraint(columnNames = {"articleOrder","article"}))
+//(uniqueConstraints = @UniqueConstraint(columnNames = {"articleOrder","article"}))
 public class ArticleInOrder {
 
     @Id

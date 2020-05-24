@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,14 @@ public class UserController {
             roles.add(userRoles.name());
         }
         return roles;
+    }
+
+    @ModelAttribute("passwordResetForm")
+    public ChangePasswordForm changePasswordForm() {
+        ChangePasswordForm form = new ChangePasswordForm();
+        form.setNewPassword("12");
+        form.setConfirmNewPassword("12");
+        return form;
     }
 
 
@@ -87,5 +96,35 @@ public class UserController {
         user.setEncodedPassword(encoder.encode("1111"));
         userRepository.save(user);
         return "redirect:/admin/users";
+    }
+
+    @GetMapping(path = "/set-password")
+    public String changePasswordGet(ModelMap modelMap,
+                                    @ModelAttribute("passwordResetForm")
+                                            ChangePasswordForm changePasswordForm) {
+        return "changePassword";
+    }
+
+    @PostMapping(path = "/set-password")
+    public String changePasswordPost(Principal principal,
+                                     @ModelAttribute("passwordResetForm")
+                                     @Validated
+                                             ChangePasswordForm form,
+                                     BindingResult validationResult) {
+        if (!form.getNewPassword().equals(form.getConfirmNewPassword())) {
+            validationResult.addError(new FieldError("form", "confirmNewPassword",
+                    "Пароли должны совпадать"));
+            return "changePassword";
+
+        }
+        if (validationResult.hasErrors()) {
+            return "changePassword";
+        }
+        User user = userRepository.findUserByLogin(principal.getName());
+        user.setEncodedPassword(encoder.encode(form.getNewPassword()));
+        userRepository.save(user);
+
+
+        return "redirect:/";
     }
 }

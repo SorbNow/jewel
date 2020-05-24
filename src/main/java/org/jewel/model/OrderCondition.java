@@ -35,6 +35,7 @@ public enum OrderCondition {
         }
         return condition;
     }
+
     public OrderCondition changeConditionToPrevious(OrderCondition condition) {
         switch (condition) {
             case FINISHED: {

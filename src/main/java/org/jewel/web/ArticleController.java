@@ -34,7 +34,7 @@ public class ArticleController {
 
     private List<String> getCollectionTypesList() {
         List<String> collectionTypes = new ArrayList<>();
-        for (CollectionType collectionType: CollectionType.values()) {
+        for (CollectionType collectionType : CollectionType.values()) {
             collectionTypes.add(collectionType.name());
         }
         return collectionTypes;
@@ -43,7 +43,7 @@ public class ArticleController {
     @GetMapping(path = "/articles")
     public String articlesList(ModelMap modelMap) {
         List<Article> articles = articleRepository.findAllArticlesSorted();
-        modelMap.addAttribute("allArticlesList",articles);
+        modelMap.addAttribute("allArticlesList", articles);
         return "articleList";
     }
 
@@ -51,45 +51,45 @@ public class ArticleController {
     public String addArticle(ModelMap modelMap) {
         Article article = new Article();
         modelMap.addAttribute("article", article);
-        modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
-        modelMap.addAttribute("metalTypeAttr",new MetalType());
+        modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
+        modelMap.addAttribute("metalTypeAttr", new MetalType());
         modelMap.addAttribute("collectionTypesList", CollectionType.values());
-        modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+        modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
         return "addArticle";
     }
 
     @PostMapping(path = "/article/add")
     public String addArticlePost(ModelMap modelMap,
-                             @ModelAttribute("metalTypeAttr")
-                                     MetalType metalType,
-                             @Validated
-                             @ModelAttribute("article")
-                             Article article,
-                             BindingResult validationResult) {
+                                 @ModelAttribute("metalTypeAttr")
+                                         MetalType metalType,
+                                 @Validated
+                                 @ModelAttribute("article")
+                                         Article article,
+                                 BindingResult validationResult) {
 
         if (article.getMetalType() == null) {
             validationResult.addError(new FieldError("article", "metalType",
                     "Поле обязательно для заполнения"));
-            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
-            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
         article.setArticleName(article.getArticleName().trim());
-        article.setDummyArticleName(article.getArticleName()+article.getMetalType().getMetalTypeName()+article.getMetalType().getHallmark());
+        article.setDummyArticleName(article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
         //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
         if (validationResult.hasErrors()) {
-            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
-            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
-        if (articleRepository.findArticleByArticleNameAndMetalType(article.getArticleName(),article.getMetalType())!=null) {
+        if (articleRepository.findArticleByArticleNameAndMetalType(article.getArticleName(), article.getMetalType()) != null) {
             validationResult.addError(new FieldError("article", "articleName",
                     "Артикул " + article.getArticleName() + " уже есть в базе."));
-            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
-            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
 
@@ -101,10 +101,10 @@ public class ArticleController {
     public String editArticleGet(@PathVariable(name = "articleId") long articleId,
                                  ModelMap modelMap) {
         Article article = articleRepository.findArticleByArticleId(articleId);
-        modelMap.addAttribute("article",article);
-        modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+        modelMap.addAttribute("article", article);
+        modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
         modelMap.addAttribute("collectionTypesList", CollectionType.values());
-        modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+        modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
         return "editArticle";
     }
 
@@ -112,39 +112,39 @@ public class ArticleController {
     public String editArticlePost(@PathVariable(name = "articleId") long articleId,
                                   ModelMap modelMap,
                                   @Validated
-                                      @ModelAttribute("article")
-                                              Article article,
+                                  @ModelAttribute("article")
+                                          Article article,
                                   BindingResult validationResult,
                                   @Validated
                                   @ModelAttribute("metalTypeAttr")
                                           MetalType metalType,
                                   BindingResult metalTypeValidResult
-                                 ) {
+    ) {
         if (article.getMetalType() == null) {
             validationResult.addError(new FieldError("article", "metalType",
                     "Поле обязательно для заполнения"));
-            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
-            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
 //        metalType=metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark());
         article.setArticleName(article.getArticleName().trim());
-        article.setDummyArticleName(article.getArticleName()+article.getMetalType().getMetalTypeName()+article.getMetalType().getHallmark());
+        article.setDummyArticleName(article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
 //        article.setMetalType(metalType);
         if (validationResult.hasErrors()) {
-            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
-            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
-        if (articleRepository.findArticleByArticleNameAndMetalType(article.getArticleName(),article.getMetalType())!=null &&
-                (!article.getDummyArticleName().equals(articleRepository.findArticleByArticleId(articleId).getDummyArticleName()))){
+        if (articleRepository.findArticleByArticleNameAndMetalType(article.getArticleName(), article.getMetalType()) != null &&
+                (!article.getDummyArticleName().equals(articleRepository.findArticleByArticleId(articleId).getDummyArticleName()))) {
             validationResult.addError(new FieldError("article", "articleName",
                     "Артикул " + article.getArticleName() + " уже есть в базе."));
-            modelMap.addAttribute("metalTypeList",metalTypeRepository.findAllMetalTypes());
+            modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
-            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals() );
+            modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
 

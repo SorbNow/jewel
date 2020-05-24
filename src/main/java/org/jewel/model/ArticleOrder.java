@@ -23,8 +23,6 @@ public class ArticleOrder {
     @OneToMany(fetch = FetchType.EAGER)
     private List<ArticleInOrder> articleInOrder;
 
-
-
     @Enumerated
     private OrderCondition orderCondition;
 
@@ -37,7 +35,6 @@ public class ArticleOrder {
 
     @Column
     private String comment;
-
 
     @Column
     private int countDaysFromAddOrder;

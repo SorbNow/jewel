@@ -40,7 +40,7 @@ public class RegistrationController {
 
     private List<String> getListOfRoles() {
         List<String> roles = new ArrayList<>();
-        for (UserRoles userRoles: UserRoles.values()) {
+        for (UserRoles userRoles : UserRoles.values()) {
             roles.add(userRoles.name());
         }
         return roles;

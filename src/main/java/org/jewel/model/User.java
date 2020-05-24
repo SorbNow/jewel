@@ -4,7 +4,6 @@ package org.jewel.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -24,7 +23,7 @@ public class User {
 
     @Column(nullable = false)
     @JsonIgnore
-    @Size(min = 3,message = "Password must be at least 3 chars")
+    @Size(min = 3, message = "Password must be at least 3 chars")
     private String encodedPassword;
 
     @Enumerated(EnumType.STRING)

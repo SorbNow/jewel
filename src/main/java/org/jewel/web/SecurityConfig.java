@@ -33,8 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
 //                .antMatchers("/login-page").not().authenticated()
                 .antMatchers("/login**", "/style.css").permitAll()
-                .antMatchers("/admin","/admin/**").hasRole("АДМИНИСТРАТОР")
-                .antMatchers("/", "/order/**","/user/**", "/all/**","/**", "/static/images/**", "/static/css/**","/js/**").authenticated()
+                .antMatchers("/admin", "/admin/**").hasRole("АДМИНИСТРАТОР")
+                .antMatchers("/", "/order/**", "/user/**", "/all/**", "/**", "/static/images/**", "/static/css/**", "/js/**").authenticated()
                 .anyRequest().denyAll();
 
         http.formLogin()
@@ -42,7 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("j_password")
                 .loginProcessingUrl("/submit-login-form") // -> POST
                 .loginPage("/login-page")
-                .defaultSuccessUrl("/");
+                .defaultSuccessUrl("/")
+                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
+        ;
 
     }
 
@@ -51,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
 
     @Bean
     public AuthenticationProvider authenticationProvider(

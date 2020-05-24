@@ -8,7 +8,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServlet;
 import java.util.List;
@@ -29,21 +32,21 @@ public class MetalTypeController extends HttpServlet {
     @GetMapping(path = "/article/metalType/add")
     public String addMetalTypeGet(ModelMap modelMap) {
         MetalType metalType = new MetalType();
-        modelMap.addAttribute("metalType" , metalType);
+        modelMap.addAttribute("metalType", metalType);
         return "addMetalType";
     }
 
     @PostMapping(path = "/article/metalType/add")
     public String addMetalTypePost(
-                                   @Validated
-                                   @ModelAttribute("metalType")
-                                   MetalType metalType,
-                                   BindingResult validationResult) {
+            @Validated
+            @ModelAttribute("metalType")
+                    MetalType metalType,
+            BindingResult validationResult) {
         metalType.setMetalTypeName(metalType.getMetalTypeName().trim());
         if (validationResult.hasErrors()) {
             return "addMetalType";
         }
-        if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()) != null) {
+        if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(), metalType.getHallmark()) != null) {
             validationResult.addError(new FieldError("metalType", "metalTypeName",
                     "Такая запись уже есть в базе"));
             return "addMetalType";
@@ -54,8 +57,8 @@ public class MetalTypeController extends HttpServlet {
 
     @GetMapping(path = "/article/metalType/{id}")
     public String editMetalTypeGet(@PathVariable(name = "id") int id,
-                                ModelMap modelMap) {
-        MetalType metalType =metalTypeRepository.findMetalTypeById(id);
+                                   ModelMap modelMap) {
+        MetalType metalType = metalTypeRepository.findMetalTypeById(id);
         modelMap.addAttribute("metalType", metalType);
         return "editMetalType";
     }
@@ -64,13 +67,13 @@ public class MetalTypeController extends HttpServlet {
     public String editMetalTypePost(@PathVariable(name = "id") int id,
                                     @Validated
                                     @ModelAttribute("metalType")
-                                    MetalType metalType,
+                                            MetalType metalType,
                                     BindingResult validationResult) {
         metalType.setMetalTypeName(metalType.getMetalTypeName().trim());
         if (validationResult.hasErrors()) {
             return "editMetalType";
         }
-        if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()) != null) {
+        if (metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(), metalType.getHallmark()) != null) {
             validationResult.addError(new FieldError("metalType", "metalTypeName",
                     "Такая запись уже есть в базе"));
             return "editMetalType";

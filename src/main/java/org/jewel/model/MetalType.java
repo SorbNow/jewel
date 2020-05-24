@@ -2,13 +2,11 @@ package org.jewel.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"metalTypeName","hallmark"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"metalTypeName", "hallmark"}))
 public class MetalType {
     public MetalType() {
     }
@@ -59,6 +57,6 @@ public class MetalType {
 
     @Override
     public String toString() {
-        return  metalTypeName + " " + hallmark ;
+        return metalTypeName + " " + hallmark;
     }
 }

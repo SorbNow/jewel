@@ -2,7 +2,9 @@ package org.jewel.web;
 
 import org.jewel.db.CustomerRepository;
 import org.jewel.db.UserRepository;
-import org.jewel.model.*;
+import org.jewel.model.Customer;
+import org.jewel.model.User;
+import org.jewel.model.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -42,7 +44,7 @@ public class StartupListener {
             userDAO.save(u);
         }
         List<Customer> customers = new ArrayList<>();
-        for (Customer customer: customerRepository.findAll()) {
+        for (Customer customer : customerRepository.findAll()) {
             customers.add(customer);
         }
         if (customers.size() == 0) {
