@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/admin/users/{id}")
-    public String saveUser(@PathVariable(name = "id") int id,
+    public String saveEditedUser(@PathVariable(name = "id") int id,
                            ModelMap modelMap,
                            @Validated
                            @ModelAttribute("user")
