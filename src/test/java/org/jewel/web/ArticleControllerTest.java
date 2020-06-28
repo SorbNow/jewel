@@ -156,7 +156,7 @@ class ArticleControllerTest {
 
     @Test
     void editArticleGetPage() throws Exception {
-        mockMvc.perform(get("/article/{articleId}", 2L))
+        mockMvc.perform(get("/article/{articleId}", 2))
                 .andDo(print())
                 .andExpect(status().isOk());
 //                .andExpect((jsonPath("$.articleId", is(1L))));

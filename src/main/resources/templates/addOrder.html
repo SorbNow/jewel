@@ -23,6 +23,12 @@
 <!--            <p th:if="${#fields.hasErrors('orderNumber')}" th:errors="${order.orderNumber}" th:class="'error'" style="color: red"> Ошибка</p>-->
         </div>
 
+        <div class="form-group">
+            <label for="orderNumIn1C">Номер заказа в 1С :</label>
+            <input type="text" th:value="${order.orderNumberIn1C}" th:name="orderNumberIn1C"  class="form-control" id="orderNumIn1C">
+            <!--            <p th:if="${#fields.hasErrors('orderNumber')}" th:errors="${order.orderNumber}" th:class="'error'" style="color: red"> Ошибка</p>-->
+        </div>
+
         <div>
             <label for="prioritySelect">Приоритет:</label>
             <select class="form-control " id="prioritySelect" th:name="priority" title="Выберите приоритет">

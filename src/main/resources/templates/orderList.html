@@ -30,6 +30,8 @@
 
                 <th >№ заказа</th>
                 <th ></th>
+                <th >№ в 1С</th>
+
 
                 <th >Приор.</th>
                 <th >Дата добавления</th>
@@ -101,6 +103,7 @@
                     </a>
 
                 </td>
+                <td th:rowspan="${stat.size}" th:utext="${ordersToView.orderNumberIn1C}">В 1С</td>
                 <td th:rowspan="${stat.size}" th:utext="${ordersToView.getPriority()?.priorityType}">Приоритет</td>
                 <td  th:rowspan="${stat.size}" th:utext="${articlesToView.getAddOrderDate()?.format(dateFormatter)}">Дата добавления</td>
                 <td th:rowspan="${stat.size}" th:utext="${ordersToView.getOrderCondition()?.getTitle()}">Состояние</td>

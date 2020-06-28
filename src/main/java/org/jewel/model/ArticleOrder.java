@@ -14,6 +14,9 @@ public class ArticleOrder {
     @GeneratedValue
     private long orderId;
 
+    @Column
+    private String orderNumberIn1C;
+
     @Column(unique = true, nullable = false)
     private String orderNumber;
 
@@ -200,4 +203,11 @@ public class ArticleOrder {
         this.articleInOrder = articleInOrder;
     }
 
+    public String getOrderNumberIn1C() {
+        return orderNumberIn1C;
+    }
+
+    public void setOrderNumberIn1C(String orderNumberIn1C) {
+        this.orderNumberIn1C = orderNumberIn1C;
+    }
 }
