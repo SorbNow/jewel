@@ -32,6 +32,9 @@ public class ArticleController {
     @Autowired
     private MineralRepository mineralRepository;
 
+    @Autowired
+    private  ArticleService articleService;
+
     private List<String> getCollectionTypesList() {
         List<String> collectionTypes = new ArrayList<>();
         for (CollectionType collectionType : CollectionType.values()) {
@@ -75,9 +78,6 @@ public class ArticleController {
             modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
-        article.setArticleName(article.getArticleName().trim());
-        article.setDummyArticleName(article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
-        //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
         if (validationResult.hasErrors()) {
             modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
@@ -92,8 +92,11 @@ public class ArticleController {
             modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
+        article.setArticleName(article.getArticleName().trim());
+        article.setDummyArticleName(article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
+        //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
 
-        articleRepository.save(article);
+        articleService.saveArticle(article);
         return "redirect:/articles";
     }
 

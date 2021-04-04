@@ -4,18 +4,21 @@ import org.jewel.db.ArticleRepository;
 import org.jewel.db.MetalTypeRepository;
 import org.jewel.model.Article;
 import org.jewel.model.MetalType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,22 +34,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 
-@TestPropertySource("/application-test.properties")
-@Sql(value = {"/create-article-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/create-article-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@TestPropertySource("/application.properties")
+//@ActiveProfiles("test")
+@Sql(value = {"/create_article_before.sql"},executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/create_article_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @WithUserDetails("master")
 class ArticleControllerTest {
+   /* @BeforeEach
+    void setUp() {
+        MetalType metalType = new MetalType();
+        metalType.setHallmark(585);
+        metalType.setMetalTypeName("gold");
+        metalTypeRepository.save(metalType);
+        Article article = new Article();
+        article.setMetalType(metalType);
+        article.setArticleName("test-article-name");
+        articleRepository.save(article);
+    }
 
+    @AfterEach
+    void tearDown() {
+
+    }*/
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ArticleController articleController;
 
-    @MockBean
+    @Autowired
     private ArticleRepository articleRepository;
 
-    @MockBean
+    @Autowired
+    private ArticleService articleService;
+
+    @Autowired
     private MetalTypeRepository metalTypeRepository;
 
     @Test
@@ -80,7 +102,7 @@ class ArticleControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/articles"));
-        verify(articleRepository,times(1)).save(any(Article.class));
+//        verify(articleRepository,times(1)).save(any(Article.class));
         assertEquals(article.getDummyArticleName(), article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
 
 
@@ -100,7 +122,8 @@ class ArticleControllerTest {
         this.mockMvc.perform(post("/article/add")
                 .flashAttr("article", article))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Артикул " + article.getArticleName() + " уже есть в базе.")));
     }
 
     @Test
@@ -111,7 +134,7 @@ class ArticleControllerTest {
         this.mockMvc.perform(post("/article/add")
                 .flashAttr("article", article))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isFound());
     }
     @Test
     void addArticleWithBlankArticleName() throws Exception {
@@ -156,7 +179,20 @@ class ArticleControllerTest {
 
     @Test
     void editArticleGetPage() throws Exception {
-        mockMvc.perform(get("/article/{articleId}", 2))
+   /*     MetalType metalType = new MetalType();
+        metalType.setHallmark(585);
+        metalType.setMetalTypeName("gold");
+        metalTypeRepository.save(metalType);
+        Article article = new Article();
+        article.setMetalType(metalType);
+        article.setArticleName("test-article-name");
+        articleService.saveArticle(article);*/
+        List<Article> articles = articleRepository.findAllArticles();
+        System.out.println(articles);
+        System.out.println("size: " + articles.size());
+        List<MetalType> metalTypes = metalTypeRepository.findAllMetalTypes();
+        System.out.println(metalTypes);
+        mockMvc.perform(get("/article/{articleId}", 1L))
                 .andDo(print())
                 .andExpect(status().isOk());
 //                .andExpect((jsonPath("$.articleId", is(1L))));
