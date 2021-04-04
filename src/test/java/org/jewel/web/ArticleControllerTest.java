@@ -4,6 +4,7 @@ import org.jewel.db.ArticleRepository;
 import org.jewel.db.MetalTypeRepository;
 import org.jewel.model.Article;
 import org.jewel.model.MetalType;
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,7 +86,10 @@ class ArticleControllerTest {
         this.mockMvc.perform(get("/articles"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Артикул")));
+                .andExpect(content().string(containsString("Артикул")))
+                .andExpect(content().string(containsString("#1")));
+
+        Assert.assertEquals(3, articleRepository.findAllArticles().size());
     }
 
     @Test
