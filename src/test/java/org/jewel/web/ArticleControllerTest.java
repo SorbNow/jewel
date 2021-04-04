@@ -22,7 +22,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -205,7 +205,14 @@ class ArticleControllerTest {
 
     @Test
     void deleteArticle() throws Exception {
+
+        boolean isExistBeforeDelete = articleRepository.findById(1L).isPresent();
         mockMvc.perform(get("/article/delete/{articleId}",1L))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/articles"));
+        boolean isExistAfterDelete = articleRepository.findById(1L).isPresent();
+
+        assertTrue(isExistBeforeDelete);
+        assertFalse(isExistAfterDelete);
     }
 }
