@@ -43,7 +43,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithUserDetails("simpleUser")
     void accessDeniedTest() throws Exception {
         this.mockMvc.perform(get("/admin/customers"))
                 .andDo(print())
