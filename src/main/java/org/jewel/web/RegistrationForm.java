@@ -1,5 +1,7 @@
 package org.jewel.web;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Objects;
@@ -11,8 +13,10 @@ public class RegistrationForm {
     private String login;
 
     @Size(min = 4, message = "Слишком короткий пароль")
+    @NotBlank(message = "Поле пароля должно быть заполнено")
     private String password;
 
+    @NotNull(message = "Укажите роль")
     private String role;
 
 

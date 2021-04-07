@@ -24,7 +24,6 @@ public class RegistrationController {
     @Autowired
     private UserRepository users;
 
-
     @Autowired
     private PasswordEncoder encoder;
 

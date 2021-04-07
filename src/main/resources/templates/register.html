@@ -24,8 +24,8 @@
         </div>
         <p></p>
         <div class="form-group">
-            <label for="customerCity">Пароль:</label>
-            <input type="text" th:value="${form.password}" th:name="password" class="form-control" id="customerCity">
+            <label for="customerPassword">Пароль:</label>
+            <input type="text" th:value="${form.password}" th:name="password" class="form-control" id="customerPassword">
             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:class="'error'" style="color: red">
                 Ошибка города</p>
         </div>
