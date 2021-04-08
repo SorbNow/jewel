@@ -12,7 +12,7 @@ public class Mineral {
     @GeneratedValue
     private int id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "mineral_name")
     @NotBlank(message = "Поле не может быть пустым")
     private String insert;
 
