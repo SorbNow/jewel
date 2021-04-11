@@ -161,6 +161,7 @@ public class ProductionOrderController {
             articleInOrder.setCount(1);
             articleInOrder.setAddOrderDate(LocalDate.now());
             articleInOrder.setExpectedDate(LocalDate.now().plusDays(a.getProductionTime()));
+            articleInOrder.setCondition(OrderCondition.ADDED);
 //            articleInOrder.setDummyForUnique(order.getOrderNumber()+a.getArticleName());
             articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
         }
@@ -249,6 +250,7 @@ public class ProductionOrderController {
                 articleInOrder.setProductionOrder(order.getOrderNumber());
                 articleInOrder.setArticle(a);
                 articleInOrder.setCount(1);
+                articleInOrder.setCondition(OrderCondition.ADDED);
                 articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
                 orderRepository.save(order);
             }

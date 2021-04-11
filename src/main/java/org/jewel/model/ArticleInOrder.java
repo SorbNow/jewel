@@ -46,6 +46,9 @@ public class ArticleInOrder {
     private List<ArticleDoneDateAndCount> doneDateAndCount;
 
     @Column
+    private OrderCondition condition;
+
+    @Column
     private LocalDate lastDate;
     @Column
 //    @Temporal(TemporalType.DATE)
@@ -78,6 +81,15 @@ public class ArticleInOrder {
     public void setProductionOrder(String productionOrder) {
         this.productionOrder = productionOrder;
     }
+
+    public OrderCondition getCondition() {
+        return condition;
+    }
+
+    public void setCondition(OrderCondition condition) {
+        this.condition = condition;
+    }
+
 
     public int getCount() {
         return count;
