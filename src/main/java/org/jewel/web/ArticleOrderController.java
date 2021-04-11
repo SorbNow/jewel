@@ -101,7 +101,7 @@ public class ArticleOrderController {
         return "oldOrderList";
     }
 
-    @GetMapping(path = "/orders3")
+   /* @GetMapping(path = "/orders3")
     public String getOrdersList3(ModelMap modelMap) {
         List<ArticleOrder> orderList = orderRepository.findAllOrders();
         DateTimeFormatter europeanDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -115,7 +115,7 @@ public class ArticleOrderController {
         modelMap.addAttribute("conProcess", OrderCondition.PROCESSING);
 
         return "orderModal";
-    }
+    }*/
 
     @GetMapping(path = "/order/add")
     public String addOrderGet(ModelMap modelMap) {
@@ -178,9 +178,15 @@ public class ArticleOrderController {
 
     @PostMapping(path = "/order/articlesCount")
     public String saveCount(@ModelAttribute("order")
-                                    ArticleOrder order) {
+                                    ArticleOrder order, ModelMap mod, BindingResult validationResult) {
 //        ArticleOrder order = orderRepository.findArticleOrderByOrderNumber(articles.get(0).getArticleOrder());
 //        order.setArticleInOrder(articles);
+        if (validationResult.hasErrors()) {
+            ArticleOrder articleOrder = orderRepository.findArticleOrderByOrderId(order.getOrderId());
+            mod.addAttribute("order", order);
+            return "countArticlesInOrder";
+
+        }
         for (ArticleInOrder a : order.getArticleInOrder()) {
             if (a.getExpectedDate() == null) {
                 LocalDate date = LocalDate.now();
@@ -206,7 +212,7 @@ public class ArticleOrderController {
     }
 
     @GetMapping(path = "/order/delete/{orderId}")
-    public String deleteArticle(@PathVariable(name = "orderId") long orderId) {
+    public String deleteOrder(@PathVariable(name = "orderId") long orderId) {
         ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
         List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
         orderRepository.delete(order);

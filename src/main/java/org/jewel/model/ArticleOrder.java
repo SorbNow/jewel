@@ -1,6 +1,7 @@
 package org.jewel.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
@@ -31,6 +32,7 @@ public class ArticleOrder {
 
     @ManyToMany
     @NotNull(message = "Выберите минимум 1 артикул")
+    @NotEmpty(message = "Список артикулов не может быть пустым")
     private List<Article> articles;
 
     @ManyToOne
