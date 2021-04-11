@@ -37,8 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @TestPropertySource("/application.properties")
 //@ActiveProfiles("test")
-@Sql(value = {"/create_article_before.sql"},executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/create_article_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = {"/create_user_before.sql", "/create_metal_type_before.sql", "/create_article_before.sql"},executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/create_user_after.sql", "/create_article_after.sql", "/create_metal_type_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @WithUserDetails("master")
 class ArticleControllerTest {
    /* @BeforeEach
