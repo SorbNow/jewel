@@ -18,10 +18,10 @@ import java.util.List;
 
 @Controller
 @SessionAttributes("order")
-public class ArticleOrderController {
+public class ProductionOrderController {
 
     @Autowired
-    private ArticleOrderRepository orderRepository;
+    private ProductionOrderRepository orderRepository;
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -71,7 +71,7 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/orders")
     public String getOrdersList(ModelMap modelMap) {
-        List<ArticleOrder> orderList = orderRepository.findAllOrders();
+        List<ProductionOrder> orderList = orderRepository.findAllOrders();
         DateTimeFormatter europeanDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         modelMap.addAttribute("orderList", orderList);
         modelMap.addAttribute("dateFormatter", europeanDateFormatter);
@@ -87,7 +87,7 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/orders2")
     public String getOrdersList2(ModelMap modelMap) {
-        List<ArticleOrder> orderList = orderRepository.findAllOrders();
+        List<ProductionOrder> orderList = orderRepository.findAllOrders();
         DateTimeFormatter europeanDateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         modelMap.addAttribute("orderList", orderList);
         modelMap.addAttribute("dateFormatter", europeanDateFormatter);
@@ -119,7 +119,7 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/order/add")
     public String addOrderGet(ModelMap modelMap) {
-        ArticleOrder order = new ArticleOrder();
+        ProductionOrder order = new ProductionOrder();
         modelMap.addAttribute("order", order);
         modelMap.addAttribute("articleList", articleRepository.findAllArticlesSorted());
         modelMap.addAttribute("priorityList", getPriorityList());
@@ -132,7 +132,7 @@ public class ArticleOrderController {
                                ModelMap mod,
                                @Validated
                                @ModelAttribute("order")
-                                       ArticleOrder order,
+                                           ProductionOrder order,
                                BindingResult validationResult) {
 
         if (validationResult.hasErrors()) {
@@ -156,7 +156,7 @@ public class ArticleOrderController {
 
         for (Article a : order.getArticles()) {
             ArticleInOrder articleInOrder = new ArticleInOrder();
-            articleInOrder.setArticleOrder(order.getOrderNumber());
+            articleInOrder.setProductionOrder(order.getOrderNumber());
             articleInOrder.setArticle(a);
             articleInOrder.setCount(1);
             articleInOrder.setAddOrderDate(LocalDate.now());
@@ -178,11 +178,11 @@ public class ArticleOrderController {
 
     @PostMapping(path = "/order/articlesCount")
     public String saveCount(@ModelAttribute("order")
-                                    ArticleOrder order, ModelMap mod, BindingResult validationResult) {
+                                    ProductionOrder order, ModelMap mod, BindingResult validationResult) {
 //        ArticleOrder order = orderRepository.findArticleOrderByOrderNumber(articles.get(0).getArticleOrder());
 //        order.setArticleInOrder(articles);
         if (validationResult.hasErrors()) {
-            ArticleOrder articleOrder = orderRepository.findArticleOrderByOrderId(order.getOrderId());
+            ProductionOrder productionOrder = orderRepository.findProductionOrderByOrderId(order.getOrderId());
             mod.addAttribute("order", order);
             return "countArticlesInOrder";
 
@@ -213,8 +213,8 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/order/delete/{orderId}")
     public String deleteOrder(@PathVariable(name = "orderId") long orderId) {
-        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
-        List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
+        ProductionOrder order = orderRepository.findProductionOrderByOrderId(orderId);
+        List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByProductionOrder(order.getOrderNumber());
         orderRepository.delete(order);
         for (ArticleInOrder a : articleInOrderList) {
             articleInOrderRepository.delete(a);
@@ -225,8 +225,8 @@ public class ArticleOrderController {
     @GetMapping(path = "/order/{orderId}")
     public String editOrder(ModelMap modelMap,
                             @PathVariable(name = "orderId") long orderId) {
-        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
-        List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByArticleOrder(order.getOrderNumber());
+        ProductionOrder order = orderRepository.findProductionOrderByOrderId(orderId);
+        List<ArticleInOrder> articleInOrderList = articleInOrderRepository.findArticleInOrdersByProductionOrder(order.getOrderNumber());
         modelMap.addAttribute("order", order);
         modelMap.addAttribute("articleList", articleRepository.findAllArticlesSorted());
         modelMap.addAttribute("priorityList", getPriorityList());
@@ -239,14 +239,14 @@ public class ArticleOrderController {
                                 @PathVariable(name = "orderId") long orderId,
                                 RedirectAttributes redirectAttributes,
                                 @ModelAttribute("order")
-                                        ArticleOrder order) {
+                                        ProductionOrder order) {
 
         List<ArticleInOrder> articlesInOrder = order.getArticleInOrder();
         for (Article a : order.getArticles()) {
-            if (articleInOrderRepository.findArticleInOrderByArticleAndArticleOrder(a, order.getOrderNumber()) == null) {
+            if (articleInOrderRepository.findArticleInOrderByArticleAndProductionOrder(a, order.getOrderNumber()) == null) {
 
                 ArticleInOrder articleInOrder = new ArticleInOrder();
-                articleInOrder.setArticleOrder(order.getOrderNumber());
+                articleInOrder.setProductionOrder(order.getOrderNumber());
                 articleInOrder.setArticle(a);
                 articleInOrder.setCount(1);
                 articlesInOrder.add(articleInOrderRepository.save(articleInOrder));
@@ -290,7 +290,7 @@ public class ArticleOrderController {
     public String setCountGet(ModelMap modelMap,
                               @ModelAttribute("orderId")
                                       long orderId) {
-        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
+        ProductionOrder order = orderRepository.findProductionOrderByOrderId(orderId);
         modelMap.addAttribute("order", order);
         return "countArticlesInOrder";
 
@@ -299,7 +299,7 @@ public class ArticleOrderController {
     @GetMapping(path = "/order/changeOrderStatus/{orderId}")
     public String editOrder(@PathVariable(name = "orderId") long orderId,
                             RedirectAttributes redirectAttributes) {
-        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
+        ProductionOrder order = orderRepository.findProductionOrderByOrderId(orderId);
         OrderCondition o = order.getOrderCondition();
         if (o == OrderCondition.MOLDED) {
             for (ArticleInOrder articleInOrder : order.getArticleInOrder()) {
@@ -326,7 +326,7 @@ public class ArticleOrderController {
 
     @GetMapping(path = "/order/approve")
     public String approveArticlesGet(ModelMap modelMap,
-                                     @ModelAttribute("orderName") ArticleOrder order
+                                     @ModelAttribute("orderName") ProductionOrder order
     ) {
 
         ApproveCountList approveCountList = new ApproveCountList();
@@ -358,7 +358,7 @@ public class ArticleOrderController {
     @PostMapping(path = "/order/approve")
     public String approveArticlesPost(ModelMap modelMap,
                                       @ModelAttribute("order")
-                                              ArticleOrder order,
+                                              ProductionOrder order,
                                       @ModelAttribute("forms")
                                               ApproveCountList approveCountForms,
                                       BindingResult validationResult) {
@@ -416,7 +416,7 @@ public class ArticleOrderController {
 
     @GetMapping(path = "order/rollback/{type}/{orderId}")
     public String rollbackWithoutSave(@PathVariable(name = "type") String type, @PathVariable(name = "orderId") long orderId) {
-        ArticleOrder order = orderRepository.findArticleOrderByOrderId(orderId);
+        ProductionOrder order = orderRepository.findProductionOrderByOrderId(orderId);
         if (type.equals("save") || type.equals("clear")) {
             if (type.equals("clear")) {
                 for (ArticleInOrder a : order.getArticleInOrder()) {

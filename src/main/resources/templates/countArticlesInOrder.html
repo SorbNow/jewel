@@ -27,7 +27,7 @@
             <tr th:each="articleView, itemStat : *{order.articleInOrder}">
                 <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].article.articleName}" /></td>
                 <td><input th:field="${order.articleInOrder[__${itemStat.index}__].count}" /></td>
-                <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].articleOrder}" hidden></td>
+                <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].productionOrder}" hidden></td>
                 <td><input readonly th:field="${order.articleInOrder[__${itemStat.index}__].articleInOrderId}" hidden></td>
             </tr>
             </tbody>

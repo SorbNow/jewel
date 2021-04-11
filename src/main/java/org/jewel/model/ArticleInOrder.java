@@ -17,7 +17,7 @@ public class ArticleInOrder {
 
     @Column(nullable = false)
     @NotBlank
-    private String articleOrder;
+    private String productionOrder;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Article article;
@@ -71,12 +71,12 @@ public class ArticleInOrder {
         this.articleInOrderId = articleInOrderId;
     }
 
-    public String getArticleOrder() {
-        return articleOrder;
+    public String getProductionOrder() {
+        return productionOrder;
     }
 
-    public void setArticleOrder(String articleOrder) {
-        this.articleOrder = articleOrder;
+    public void setProductionOrder(String productionOrder) {
+        this.productionOrder = productionOrder;
     }
 
     public int getCount() {

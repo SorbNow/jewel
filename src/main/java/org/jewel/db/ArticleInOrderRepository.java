@@ -16,9 +16,9 @@ public interface ArticleInOrderRepository extends PagingAndSortingRepository<Art
     @Query("SELECT a from ArticleInOrder a")
     List<ArticleInOrder> findAllArticlesInOrders();
 
-    List<ArticleInOrder> findArticleInOrdersByArticleOrder(String articleOrder);
+    List<ArticleInOrder> findArticleInOrdersByProductionOrder(String productionOrder);
 
-    ArticleInOrder findArticleInOrderByArticleAndArticleOrder(Article article, String articleOrder);
+    ArticleInOrder findArticleInOrderByArticleAndProductionOrder(Article article, String productionOrder);
 
     ArticleInOrder findArticleInOrderByArticleInOrderId(long id);
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table
-public class ArticleOrder {
+public class ProductionOrder {
 
     @Id
     @GeneratedValue

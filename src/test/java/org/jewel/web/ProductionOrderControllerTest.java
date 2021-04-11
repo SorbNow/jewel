@@ -1,10 +1,10 @@
 package org.jewel.web;
 
-import org.jewel.db.ArticleOrderRepository;
+import org.jewel.db.ProductionOrderRepository;
 import org.jewel.db.ArticleRepository;
 import org.jewel.model.Article;
 import org.jewel.model.ArticleInOrder;
-import org.jewel.model.ArticleOrder;
+import org.jewel.model.ProductionOrder;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,15 +32,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithUserDetails("simpleUser")
 @TestPropertySource("/application.properties")
-@Sql(value = {"/create_user_before.sql", "/create_priority_before.sql", "/create_metal_type_before.sql", "/create_article_before.sql", "/create_order_before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/create_user_before.sql", "/create_order_after.sql", "/create_article_after.sql", "/create_metal_type_after.sql", "/create_priority_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class ArticleOrderControllerTest {
+@Sql(value = {"/create_customer_before.sql", "/create_user_before.sql", "/create_priority_before.sql", "/create_metal_type_before.sql", "/create_article_before.sql", "/create_order_before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/create_user_before.sql", "/create_order_after.sql", "/create_article_after.sql", "/create_metal_type_after.sql", "/create_priority_after.sql", "/create_customer_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+class ProductionOrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private ArticleOrderRepository articleOrderRepository;
+    private ProductionOrderRepository productionOrderRepository;
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -96,17 +96,17 @@ class ArticleOrderControllerTest {
 
     @Test
     void addOrderPostAndSave() throws Exception {
-        ArticleOrder articleOrder = new ArticleOrder();
-        articleOrder.setOrderNumber("#3");
+        ProductionOrder productionOrder = new ProductionOrder();
+        productionOrder.setOrderNumber("#3");
         mockMvc.perform(post("/order/add")
-                .flashAttr("order", articleOrder))
+                .flashAttr("order", productionOrder))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Выберите минимум 1 артикул")));
         List<Article> articles = new ArrayList<>();
-        articleOrder.setArticles(articles);
+        productionOrder.setArticles(articles);
 
         mockMvc.perform(post("/order/add")
-                .flashAttr("order", articleOrder))
+                .flashAttr("order", productionOrder))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Список артикулов не может быть пустым")));
 
@@ -114,18 +114,18 @@ class ArticleOrderControllerTest {
         articles.add(articleRepository.findArticleByArticleId(2));
 
         mockMvc.perform(post("/order/add")
-                .flashAttr("order", articleOrder))
+                .flashAttr("order", productionOrder))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/order/articlesCount?orderId=" + articleOrderRepository.findArticleOrderByOrderNumber("#3").getOrderId()));
+                .andExpect(redirectedUrl("/order/articlesCount?orderId=" + productionOrderRepository.findProductionOrderByOrderNumber("#3").getOrderId()));
 
-        Assert.assertNotNull(articleOrderRepository.findArticleOrderByOrderNumber("#3"));
+        Assert.assertNotNull(productionOrderRepository.findProductionOrderByOrderNumber("#3"));
 
         mockMvc.perform(get("/order/articlesCount")
-                .flashAttr("orderId", articleOrderRepository.findArticleOrderByOrderNumber("#3").getOrderId()))
+                .flashAttr("orderId", productionOrderRepository.findProductionOrderByOrderNumber("#3").getOrderId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(articleRepository.findArticleByArticleId(2).getArticleName())));
 
-        ArticleOrder order = articleOrderRepository.findArticleOrderByOrderNumber("#3");
+        ProductionOrder order = productionOrderRepository.findProductionOrderByOrderNumber("#3");
 
 
 
@@ -160,7 +160,7 @@ class ArticleOrderControllerTest {
         mockMvc.perform(get("/order/delete/{orderId}",1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/orders"));
-        Assert.assertNull(articleOrderRepository.findArticleOrderByOrderId(1));
+        Assert.assertNull(productionOrderRepository.findProductionOrderByOrderId(1));
 
     }
 
