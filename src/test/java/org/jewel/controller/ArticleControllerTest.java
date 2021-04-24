@@ -4,7 +4,7 @@ import org.jewel.repos.ArticleRepository;
 import org.jewel.repos.MetalTypeRepository;
 import org.jewel.model.Article;
 import org.jewel.model.MetalType;
-import org.jewel.service.ArticleService;
+import org.jewel.service.ArticleServiceImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ class ArticleControllerTest {
     private ArticleRepository articleRepository;
 
     @Autowired
-    private ArticleService articleService;
+    private ArticleServiceImpl articleServiceImpl;
 
     @Autowired
     private MetalTypeRepository metalTypeRepository;
@@ -71,7 +71,7 @@ class ArticleControllerTest {
     @Test
     @WithAnonymousUser
     void accessDeniedTest() throws Exception {
-        this.mockMvc.perform(get("/"))
+        this.mockMvc.perform(get("/article"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login-page"));
@@ -79,7 +79,7 @@ class ArticleControllerTest {
 
     @Test
     void articlesListTest() throws Exception {
-        this.mockMvc.perform(get("/articles"))
+        this.mockMvc.perform(get("/article"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Артикул")))
@@ -101,7 +101,7 @@ class ArticleControllerTest {
                 .flashAttr("article", article))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/articles"));
+                .andExpect(redirectedUrl("/article"));
 //        verify(articleRepository,times(1)).save(any(Article.class));
         assertEquals(article.getDummyArticleName(), article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
 
@@ -209,7 +209,7 @@ class ArticleControllerTest {
         boolean isExistBeforeDelete = articleRepository.findById(1L).isPresent();
         mockMvc.perform(get("/article/delete/{articleId}",1L))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/articles"));
+                .andExpect(redirectedUrl("/article"));
         boolean isExistAfterDelete = articleRepository.findById(1L).isPresent();
 
         assertTrue(isExistBeforeDelete);

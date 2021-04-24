@@ -1,27 +1,24 @@
 package org.jewel.controller;
 
-import org.jewel.repos.ArticleRepository;
-import org.jewel.repos.MetalTypeRepository;
-import org.jewel.repos.MineralRepository;
 import org.jewel.model.Article;
 import org.jewel.model.CollectionType;
 import org.jewel.model.MetalType;
-import org.jewel.service.ArticleService;
+import org.jewel.repos.ArticleRepository;
+import org.jewel.repos.MetalTypeRepository;
+import org.jewel.repos.MineralRepository;
+import org.jewel.service.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/article")
 public class ArticleController {
 
     @Autowired
@@ -34,24 +31,17 @@ public class ArticleController {
     private MineralRepository mineralRepository;
 
     @Autowired
-    private ArticleService articleService;
+    private ArticleServiceImpl articleServiceImpl;
 
-    private List<String> getCollectionTypesList() {
-        List<String> collectionTypes = new ArrayList<>();
-        for (CollectionType collectionType : CollectionType.values()) {
-            collectionTypes.add(collectionType.name());
-        }
-        return collectionTypes;
-    }
 
-    @GetMapping(path = "/articles")
+    @GetMapping
     public String articlesList(ModelMap modelMap) {
-        List<Article> articles = articleRepository.findAllArticlesSorted();
+        List<Article> articles = articleServiceImpl.getArticleList();
         modelMap.addAttribute("allArticlesList", articles);
         return "articleList";
     }
 
-    @GetMapping(path = "/article/add")
+    @GetMapping(path = "/add")
     public String addArticle(ModelMap modelMap) {
         Article article = new Article();
         modelMap.addAttribute("article", article);
@@ -62,7 +52,7 @@ public class ArticleController {
         return "addArticle";
     }
 
-    @PostMapping(path = "/article/add")
+    @PostMapping(path = "/add")
     public String addArticlePost(ModelMap modelMap,
                                  @ModelAttribute("metalTypeAttr")
                                          MetalType metalType,
@@ -93,15 +83,14 @@ public class ArticleController {
             modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
-        article.setArticleName(article.getArticleName().trim());
-        article.setDummyArticleName(article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
-        //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
 
-        articleService.saveArticle(article);
-        return "redirect:/articles";
+        //    article.setMetalType(metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark()));
+        article = articleServiceImpl.prepareArticleBeforeSaving(article);
+        articleServiceImpl.saveArticle(article);
+        return "redirect:/article";
     }
 
-    @GetMapping(path = "/article/{articleId}")
+    @GetMapping(path = "/{articleId}")
     public String editArticleGet(@PathVariable(name = "articleId") long articleId,
                                  ModelMap modelMap) {
         Article article = articleRepository.findArticleByArticleId(articleId);
@@ -112,7 +101,7 @@ public class ArticleController {
         return "editArticle";
     }
 
-    @PostMapping(path = "/article/{articleId}")
+    @PostMapping(path = "/{articleId}")
     public String editArticlePost(@PathVariable(name = "articleId") long articleId,
                                   ModelMap modelMap,
                                   @Validated
@@ -132,16 +121,15 @@ public class ArticleController {
             modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
-//        metalType=metalTypeRepository.findMetalTypeByMetalTypeNameAndHallmark(metalType.getMetalTypeName(),metalType.getHallmark());
-        article.setArticleName(article.getArticleName().trim());
-        article.setDummyArticleName(article.getArticleName() + article.getMetalType().getMetalTypeName() + article.getMetalType().getHallmark());
-//        article.setMetalType(metalType);
+        article = articleServiceImpl.prepareArticleBeforeSaving(article);
         if (validationResult.hasErrors()) {
             modelMap.addAttribute("metalTypeList", metalTypeRepository.findAllMetalTypes());
             modelMap.addAttribute("collectionTypesList", CollectionType.values());
             modelMap.addAttribute("insertsList", mineralRepository.findAllMinerals());
             return "addArticle";
         }
+
+        //TODO: сделать нормальную проверку
         if (articleRepository.findArticleByArticleNameAndMetalType(article.getArticleName(), article.getMetalType()) != null &&
                 (!article.getDummyArticleName().equals(articleRepository.findArticleByArticleId(articleId).getDummyArticleName()))) {
             validationResult.addError(new FieldError("article", "articleName",
@@ -152,15 +140,14 @@ public class ArticleController {
             return "addArticle";
         }
 
-        articleRepository.save(article);
-        return "redirect:/articles";
+        articleServiceImpl.saveArticle(article);
+        return "redirect:/article";
     }
 
-    @GetMapping(path = "/article/delete/{articleId}")
+    @GetMapping(path = "/delete/{articleId}")
     public String deleteArticle(@PathVariable(name = "articleId") long articleId) {
-        Article article = articleRepository.findArticleByArticleId(articleId);
-        articleRepository.delete(article);
-        return "redirect:/articles";
+        articleServiceImpl.deleteArticle(articleId);
+        return "redirect:/article";
     }
 
 }

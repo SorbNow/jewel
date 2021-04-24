@@ -1,17 +1,16 @@
 package org.jewel.service;
 
-import org.jewel.repos.ArticleRepository;
 import org.jewel.model.Article;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
-@Service
-public class ArticleService {
+import java.util.List;
 
-    @Autowired
-    private ArticleRepository articleRepository;
+public interface ArticleService {
+    void saveArticle(Article article);
+    List<String> getCollectionTypesList();
+    Article prepareArticleBeforeSaving(Article article);
+    ModelMap fillModel(ModelMap modelMap);
+    void deleteArticle(long id);
+    List<Article> getArticleList();
 
-    public void saveArticle(Article article) {
-    articleRepository.save(article);
-    }
 }
